@@ -39,7 +39,7 @@ export default function SystemSection() {
               <article className="group relative h-full overflow-hidden rounded-[1.75rem] border border-border bg-surface/60 p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-primary/50 hover:shadow-[var(--glow-brand)]">
                 <div
                   aria-hidden
-                  className="absolute -top-24 -right-24 h-52 w-52 rounded-full bg-primary/20 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+                  className="absolute -top-24 -right-24 h-52 w-52 rounded-full bg-primary/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                 />
                 <span className="relative grid h-14 w-14 place-items-center rounded-2xl bg-primary/12 text-primary transition-colors duration-500 group-hover:bg-primary group-hover:text-primary-foreground">
                   <c.icon className="h-6 w-6" />

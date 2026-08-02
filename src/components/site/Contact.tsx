@@ -11,10 +11,6 @@ export default function Contact() {
 
   return (
     <section id="contact" className="relative overflow-hidden py-24 lg:py-32">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-1/4 -left-32 h-96 w-96 rounded-full bg-primary/15 blur-[130px] animate-drift"
-      />
       <div className="mx-auto grid max-w-7xl items-start gap-14 px-5 lg:grid-cols-2 lg:px-8">
         <Reveal>
           <SectionLabel>Contact</SectionLabel>

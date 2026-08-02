@@ -20,9 +20,6 @@ export default function Hero() {
     <section id="home" ref={ref} className="relative isolate overflow-hidden pt-36 pb-24 lg:pt-48">
       {/* animated background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-1/2 h-[46rem] w-[46rem] -translate-x-1/2 rounded-full bg-primary/25 blur-[140px] animate-drift" />
-        <div className="absolute top-1/3 -left-32 h-96 w-96 rounded-full bg-primary/15 blur-[120px] animate-drift [animation-delay:-6s]" />
-        <div className="absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-primary/10 blur-[120px] animate-drift [animation-delay:-12s]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,color-mix(in_oklab,var(--foreground)_5%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--foreground)_5%,transparent)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_72%)]" />
         <motion.div
           animate={{ y: [0, -26, 0], rotate: [0, 12, 0] }}
