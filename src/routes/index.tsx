@@ -1,24 +1,56 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Toaster } from "@/components/ui/sonner";
+import Navbar from "@/components/site/Navbar";
+import Hero from "@/components/site/Hero";
+import VideoSection from "@/components/site/VideoSection";
+import SystemSection from "@/components/site/SystemSection";
+import StrategySection from "@/components/site/StrategySection";
+import ResultsSection from "@/components/site/ResultsSection";
+import IndustriesSection from "@/components/site/IndustriesSection";
+import Testimonials from "@/components/site/Testimonials";
+import Faq from "@/components/site/Faq";
+import Contact from "@/components/site/Contact";
+import Footer from "@/components/site/Footer";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Appoint Funnels — Client Acquisition On Autopilot" },
+      {
+        name: "description",
+        content:
+          "Book qualified appointments consistently with Meta Ads, high-converting funnels, and AI follow-up automation. Free strategy call.",
+      },
+      { property: "og:title", content: "Appoint Funnels — Client Acquisition On Autopilot" },
+      {
+        property: "og:description",
+        content:
+          "One proven system, three growth paths: Meta Ads, funnels, and AI automation for predictable appointments.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background text-foreground">
+      <Navbar />
+      <main>
+        <Hero />
+        <VideoSection />
+        <SystemSection />
+        <StrategySection />
+        <ResultsSection />
+        <IndustriesSection />
+        <Testimonials />
+        <Faq />
+        <Contact />
+      </main>
+      <Footer />
+      <Toaster />
     </div>
   );
 }
