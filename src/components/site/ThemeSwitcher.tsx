@@ -1,37 +1,81 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Palette, Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const themes = [
-  { id: "blue", label: "Brand Blue", swatch: "#2596BE" },
-  { id: "emerald", label: "Emerald", swatch: "#22B58A" },
-  { id: "violet", label: "Violet", swatch: "#8B5CF6" },
-  { id: "amber", label: "Amber", swatch: "#F5B32B" },
-  { id: "crimson", label: "Crimson", swatch: "#E0413C" },
-  { id: "rose", label: "Rose", swatch: "#F43F5E" },
-  { id: "cyan", label: "Cyan", swatch: "#06B6D4" },
-  { id: "lime", label: "Lime", swatch: "#84CC16" },
-  { id: "fuchsia", label: "Fuchsia", swatch: "#D946EF" },
-  { id: "orange", label: "Sunset", swatch: "#F97316" },
-  { id: "slate", label: "Slate", swatch: "#64748B" },
+type Swatch = { id: string; label: string; l: number; c: number; h: number };
+
+const HUE_NAMES = [
+  "Crimson", "Ember", "Sunset", "Amber", "Gold", "Citrus",
+  "Lime", "Fern", "Emerald", "Jade", "Teal", "Aqua",
+  "Cyan", "Sky", "Azure", "Brand Blue", "Indigo", "Violet",
+  "Purple", "Orchid", "Fuchsia", "Magenta", "Rose", "Ruby",
 ];
+
+// 25 hue steps x 40 tone/saturation steps = 1000 colors
+const HUE_STEPS = 25;
+const TONE_STEPS = 40;
+
+function buildPalette(): Swatch[] {
+  const out: Swatch[] = [];
+  for (let h = 0; h < HUE_STEPS; h++) {
+    const hue = Math.round((360 / HUE_STEPS) * h + 18) % 360;
+    const name = HUE_NAMES[Math.round((hue / 360) * HUE_NAMES.length) % HUE_NAMES.length];
+    for (let t = 0; t < TONE_STEPS; t++) {
+      const band = t % 8; // lightness band
+      const sat = Math.floor(t / 8); // 5 saturation levels
+      const l = 0.42 + band * 0.055;
+      const c = sat === 0 ? 0.03 : 0.055 + sat * 0.045;
+      out.push({
+        id: `c-${hue}-${t}`,
+        label: `${name} ${band + 1}${sat > 0 ? `\u00b7${sat + 1}` : ""}`,
+        l: Number(l.toFixed(3)),
+        c: Number(c.toFixed(3)),
+        h: hue,
+      });
+    }
+  }
+  return out;
+}
+
+const DEFAULT_ID = "c-234-20";
+
+function applySwatch(s: Swatch) {
+  const root = document.documentElement;
+  root.removeAttribute("data-theme");
+  root.style.setProperty("--primary", `oklch(${s.l} ${s.c} ${s.h})`);
+  root.style.setProperty(
+    "--primary-glow",
+    `oklch(${Math.min(0.92, s.l + 0.12)} ${Math.max(0.02, s.c - 0.01)} ${s.h})`,
+  );
+  root.style.setProperty("--ring", `oklch(${s.l} ${s.c} ${s.h})`);
+  root.style.setProperty(
+    "--primary-foreground",
+    s.l > 0.72 ? "oklch(0.145 0 0)" : "oklch(1 0 0)",
+  );
+}
 
 export default function ThemeSwitcher() {
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("blue");
+  const palette = useMemo(buildPalette, []);
+  const [active, setActive] = useState(DEFAULT_ID);
 
   useEffect(() => {
-    const saved = localStorage.getItem("af-theme") ?? "blue";
-    setActive(saved);
-    document.documentElement.setAttribute("data-theme", saved);
-  }, []);
+    const saved = localStorage.getItem("af-theme");
+    const found = palette.find((s) => s.id === saved);
+    if (found) {
+      setActive(found.id);
+      applySwatch(found);
+    }
+  }, [palette]);
 
-  const pick = (id: string) => {
-    setActive(id);
-    document.documentElement.setAttribute("data-theme", id);
-    localStorage.setItem("af-theme", id);
+  const pick = (s: Swatch) => {
+    setActive(s.id);
+    applySwatch(s);
+    localStorage.setItem("af-theme", s.id);
   };
+
+  const activeSwatch = palette.find((s) => s.id === active);
 
   return (
     <div className="fixed bottom-6 right-5 z-[60] flex flex-col items-end gap-3">
@@ -42,34 +86,34 @@ export default function ThemeSwitcher() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="glass w-56 rounded-3xl p-4 shadow-[var(--shadow-soft)]"
+            className="glass w-[min(84vw,20rem)] rounded-3xl p-4 shadow-[var(--shadow-soft)]"
           >
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Color theme
-            </p>
-            <ul className="flex flex-col gap-1">
-              {themes.map((t) => (
-                <li key={t.id}>
-                  <button
-                    type="button"
-                    onClick={() => pick(t.id)}
-                    className={cn(
-                      "flex w-full items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-colors",
-                      active === t.id
-                        ? "bg-secondary text-foreground"
-                        : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground",
-                    )}
-                  >
-                    <span
-                      className="h-5 w-5 shrink-0 rounded-full ring-1 ring-white/20"
-                      style={{ background: t.swatch }}
-                    />
-                    <span className="flex-1 text-left">{t.label}</span>
-                    {active === t.id && <Check className="h-4 w-4 text-primary" />}
-                  </button>
-                </li>
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                1000 colors
+              </p>
+              <span className="text-[11px] text-muted-foreground">
+                {activeSwatch?.label ?? "Custom"}
+              </span>
+            </div>
+            <div className="grid max-h-[52vh] grid-cols-10 gap-1.5 overflow-y-auto pr-1">
+              {palette.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  title={s.label}
+                  aria-label={s.label}
+                  onClick={() => pick(s)}
+                  className={cn(
+                    "relative grid aspect-square place-items-center rounded-lg ring-1 ring-white/10 transition-transform duration-200 hover:scale-110",
+                    active === s.id && "ring-2 ring-white",
+                  )}
+                  style={{ background: `oklch(${s.l} ${s.c} ${s.h})` }}
+                >
+                  {active === s.id && <Check className="h-3 w-3 text-white drop-shadow" />}
+                </button>
               ))}
-            </ul>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
