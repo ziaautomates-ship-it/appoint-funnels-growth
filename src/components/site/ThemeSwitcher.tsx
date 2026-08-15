@@ -9,6 +9,12 @@ const themes = [
   { id: "violet", label: "Violet", swatch: "#8B5CF6" },
   { id: "amber", label: "Amber", swatch: "#F5B32B" },
   { id: "crimson", label: "Crimson", swatch: "#E0413C" },
+  { id: "rose", label: "Rose", swatch: "#F43F5E" },
+  { id: "cyan", label: "Cyan", swatch: "#06B6D4" },
+  { id: "lime", label: "Lime", swatch: "#84CC16" },
+  { id: "fuchsia", label: "Fuchsia", swatch: "#D946EF" },
+  { id: "orange", label: "Sunset", swatch: "#F97316" },
+  { id: "slate", label: "Slate", swatch: "#64748B" },
 ];
 
 export default function ThemeSwitcher() {
