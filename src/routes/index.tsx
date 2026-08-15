@@ -11,6 +11,7 @@ import Testimonials from "@/components/site/Testimonials";
 import Faq from "@/components/site/Faq";
 import Contact from "@/components/site/Contact";
 import Footer from "@/components/site/Footer";
+import ThemeSwitcher from "@/components/site/ThemeSwitcher";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -50,6 +51,7 @@ function Index() {
         <Contact />
       </main>
       <Footer />
+      <ThemeSwitcher />
       <Toaster />
     </div>
   );

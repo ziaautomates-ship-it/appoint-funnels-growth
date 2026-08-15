@@ -222,3 +222,36 @@
     color: var(--primary-foreground);
   }
 }
+
+/* ---------- Color themes ---------- */
+:root[data-theme="blue"] {
+  --primary: oklch(0.653 0.099 227.5);
+  --primary-glow: oklch(0.78 0.09 220);
+  --accent: oklch(0.653 0.099 227.5);
+  --ring: oklch(0.653 0.099 227.5);
+}
+:root[data-theme="emerald"] {
+  --primary: oklch(0.7 0.13 165);
+  --primary-glow: oklch(0.82 0.12 165);
+  --accent: oklch(0.7 0.13 165);
+  --ring: oklch(0.7 0.13 165);
+}
+:root[data-theme="violet"] {
+  --primary: oklch(0.62 0.17 295);
+  --primary-glow: oklch(0.75 0.16 295);
+  --accent: oklch(0.62 0.17 295);
+  --ring: oklch(0.62 0.17 295);
+}
+:root[data-theme="amber"] {
+  --primary: oklch(0.79 0.15 78);
+  --primary-foreground: oklch(0.145 0 0);
+  --primary-glow: oklch(0.88 0.13 90);
+  --accent: oklch(0.79 0.15 78);
+  --ring: oklch(0.79 0.15 78);
+}
+:root[data-theme="crimson"] {
+  --primary: oklch(0.62 0.2 20);
+  --primary-glow: oklch(0.74 0.18 25);
+  --accent: oklch(0.62 0.2 20);
+  --ring: oklch(0.62 0.2 20);
+}
