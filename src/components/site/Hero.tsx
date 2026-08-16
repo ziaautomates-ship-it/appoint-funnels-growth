@@ -43,9 +43,9 @@ export default function Hero() {
             <SectionLabel>Meta Ads · Funnels · AI Automation</SectionLabel>
           </motion.div>
 
-          <h1 className="display-xl mt-8 text-[clamp(4.5rem,12vw,10.5rem)]">
+          <h1 className="display-xl mt-8 text-[clamp(3rem,12vw,10.5rem)]">
             <motion.span
-              className="block"
+              className="block whitespace-nowrap"
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
