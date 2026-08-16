@@ -43,7 +43,7 @@ export default function Hero() {
             <SectionLabel>Meta Ads · Funnels · AI Automation</SectionLabel>
           </motion.div>
 
-          <h1 className="display-xl mt-8 text-[clamp(3rem,12vw,10.5rem)]">
+          <h1 className="display-xl mt-8 text-[clamp(4.5rem,12vw,10.5rem)]">
             <motion.span
               className="block"
               initial={{ opacity: 0, y: 40 }}
