@@ -38,7 +38,15 @@ function buildPalette(): Swatch[] {
   return out;
 }
 
-const DEFAULT_ID = "c-234-20";
+const DEFAULT_ID = "signature";
+
+const SIGNATURE_SWATCH: Swatch = {
+  id: DEFAULT_ID,
+  label: "Signature Lime #DAFF10",
+  l: 0.94,
+  c: 0.221,
+  h: 120,
+};
 
 function swatchToHex(s: Swatch): string {
   const el = document.createElement("span");
@@ -47,7 +55,7 @@ function swatchToHex(s: Swatch): string {
   const rgb = getComputedStyle(el).color;
   el.remove();
   const m = rgb.match(/\d+(\.\d+)?/g);
-  if (!m) return "#2596BE";
+  if (!m) return "#DAFF10";
   const [r, g, b] = m.map(Number) as [number, number, number];
   return (
     "#" +
@@ -72,11 +80,15 @@ function applySwatch(s: Swatch) {
 
 export default function ThemeSwitcher() {
   const [open, setOpen] = useState(false);
-  const palette = useMemo(buildPalette, []);
+  const palette = useMemo(() => [SIGNATURE_SWATCH, ...buildPalette()], []);
   const [active, setActive] = useState(DEFAULT_ID);
-  const [hex, setHex] = useState("#2596BE");
+  const [hex, setHex] = useState("#DAFF10");
+  const [hexes, setHexes] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    const map: Record<string, string> = {};
+    for (const s of palette) map[s.id] = swatchToHex(s);
+    setHexes(map);
     const saved = localStorage.getItem("af-theme");
     const found = palette.find((s) => s.id === saved);
     if (found) {
@@ -120,8 +132,8 @@ export default function ThemeSwitcher() {
                 <button
                   key={s.id}
                   type="button"
-                  title={s.label}
-                  aria-label={s.label}
+                  title={`${s.label} — ${hexes[s.id] ?? ""}`}
+                  aria-label={`${s.label} ${hexes[s.id] ?? ""}`}
                   onClick={() => pick(s)}
                   className={cn(
                     "relative grid aspect-square place-items-center rounded-lg ring-1 ring-white/10 transition-transform duration-200 hover:scale-110",
