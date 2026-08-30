@@ -48,7 +48,7 @@ function swatchToHex(s: Swatch): string {
   el.remove();
   const m = rgb.match(/\d+(\.\d+)?/g);
   if (!m) return "#2596BE";
-  const [r, g, b] = m.map(Number);
+  const [r, g, b] = m.map(Number) as [number, number, number];
   return (
     "#" +
     [r, g, b].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("")
