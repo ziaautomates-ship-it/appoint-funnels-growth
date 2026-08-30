@@ -40,6 +40,21 @@ function buildPalette(): Swatch[] {
 
 const DEFAULT_ID = "c-234-20";
 
+function swatchToHex(s: Swatch): string {
+  const el = document.createElement("span");
+  el.style.color = `oklch(${s.l} ${s.c} ${s.h})`;
+  document.body.appendChild(el);
+  const rgb = getComputedStyle(el).color;
+  el.remove();
+  const m = rgb.match(/\d+(\.\d+)?/g);
+  if (!m) return "#2596BE";
+  const [r, g, b] = m.map(Number) as [number, number, number];
+  return (
+    "#" +
+    [r, g, b].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("")
+  ).toUpperCase();
+}
+
 function applySwatch(s: Swatch) {
   const root = document.documentElement;
   root.removeAttribute("data-theme");
@@ -59,6 +74,7 @@ export default function ThemeSwitcher() {
   const [open, setOpen] = useState(false);
   const palette = useMemo(buildPalette, []);
   const [active, setActive] = useState(DEFAULT_ID);
+  const [hex, setHex] = useState("#2596BE");
 
   useEffect(() => {
     const saved = localStorage.getItem("af-theme");
@@ -66,12 +82,14 @@ export default function ThemeSwitcher() {
     if (found) {
       setActive(found.id);
       applySwatch(found);
+      setHex(swatchToHex(found));
     }
   }, [palette]);
 
   const pick = (s: Swatch) => {
     setActive(s.id);
     applySwatch(s);
+    setHex(swatchToHex(s));
     localStorage.setItem("af-theme", s.id);
   };
 
@@ -93,7 +111,8 @@ export default function ThemeSwitcher() {
                 1000 colors
               </p>
               <span className="text-[11px] text-muted-foreground">
-                {activeSwatch?.label ?? "Custom"}
+                {activeSwatch?.label ?? "Custom"}{" "}
+                <span className="font-semibold text-foreground">{hex}</span>
               </span>
             </div>
             <div className="grid max-h-[52vh] grid-cols-10 gap-1.5 overflow-y-auto pr-1">
@@ -127,6 +146,9 @@ export default function ThemeSwitcher() {
       >
         {open ? <X className="h-5 w-5" /> : <Palette className="h-5 w-5" />}
       </button>
+      <span className="rounded-full bg-background/80 px-2.5 py-1 font-mono text-[10px] font-semibold tracking-wider text-foreground shadow-md backdrop-blur">
+        {hex}
+      </span>
     </div>
   );
 }
