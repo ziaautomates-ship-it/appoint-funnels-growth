@@ -111,7 +111,8 @@ export default function ThemeSwitcher() {
                 1000 colors
               </p>
               <span className="text-[11px] text-muted-foreground">
-                {activeSwatch?.label ?? "Custom"}
+                {activeSwatch?.label ?? "Custom"}{" "}
+                <span className="font-semibold text-foreground">{hex}</span>
               </span>
             </div>
             <div className="grid max-h-[52vh] grid-cols-10 gap-1.5 overflow-y-auto pr-1">
