@@ -55,7 +55,7 @@ function swatchToHex(s: Swatch): string {
   const rgb = getComputedStyle(el).color;
   el.remove();
   const m = rgb.match(/\d+(\.\d+)?/g);
-  if (!m) return "#2596BE";
+  if (!m) return "#DAFF10";
   const [r, g, b] = m.map(Number) as [number, number, number];
   return (
     "#" +
