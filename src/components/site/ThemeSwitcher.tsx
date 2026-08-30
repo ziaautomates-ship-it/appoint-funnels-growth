@@ -74,6 +74,7 @@ export default function ThemeSwitcher() {
   const [open, setOpen] = useState(false);
   const palette = useMemo(buildPalette, []);
   const [active, setActive] = useState(DEFAULT_ID);
+  const [hex, setHex] = useState("#2596BE");
 
   useEffect(() => {
     const saved = localStorage.getItem("af-theme");
@@ -81,12 +82,14 @@ export default function ThemeSwitcher() {
     if (found) {
       setActive(found.id);
       applySwatch(found);
+      setHex(swatchToHex(found));
     }
   }, [palette]);
 
   const pick = (s: Swatch) => {
     setActive(s.id);
     applySwatch(s);
+    setHex(swatchToHex(s));
     localStorage.setItem("af-theme", s.id);
   };
 
