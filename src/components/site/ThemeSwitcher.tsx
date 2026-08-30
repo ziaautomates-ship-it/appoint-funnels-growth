@@ -146,6 +146,9 @@ export default function ThemeSwitcher() {
       >
         {open ? <X className="h-5 w-5" /> : <Palette className="h-5 w-5" />}
       </button>
+      <span className="rounded-full bg-background/80 px-2.5 py-1 font-mono text-[10px] font-semibold tracking-wider text-foreground shadow-md backdrop-blur">
+        {hex}
+      </span>
     </div>
   );
 }
