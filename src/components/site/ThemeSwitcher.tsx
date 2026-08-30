@@ -40,6 +40,21 @@ function buildPalette(): Swatch[] {
 
 const DEFAULT_ID = "c-234-20";
 
+function swatchToHex(s: Swatch): string {
+  const el = document.createElement("span");
+  el.style.color = `oklch(${s.l} ${s.c} ${s.h})`;
+  document.body.appendChild(el);
+  const rgb = getComputedStyle(el).color;
+  el.remove();
+  const m = rgb.match(/\d+(\.\d+)?/g);
+  if (!m) return "#2596BE";
+  const [r, g, b] = m.map(Number);
+  return (
+    "#" +
+    [r, g, b].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("")
+  ).toUpperCase();
+}
+
 function applySwatch(s: Swatch) {
   const root = document.documentElement;
   root.removeAttribute("data-theme");
