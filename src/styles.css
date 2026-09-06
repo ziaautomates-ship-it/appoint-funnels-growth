@@ -63,7 +63,7 @@
 
 :root {
   --radius: 1rem;
-  /* Palette: #000000 / #141414 / #F5F5F5 / #FFFFFF / brand #DAFF10 */
+  /* Palette: #000000 / #141414 / #F5F5F5 / #FFFFFF / brand #D8FF00 */
   --background: oklch(0 0 0);
   --foreground: oklch(1 0 0);
   --surface: oklch(0.176 0 0);
@@ -72,20 +72,20 @@
   --card-foreground: oklch(1 0 0);
   --popover: oklch(0.176 0 0);
   --popover-foreground: oklch(1 0 0);
-  --primary: oklch(0.94 0.221 120);
+  --primary: oklch(0.9388 0.2235 120.28);
   --primary-foreground: oklch(0.145 0 0);
   --primary-glow: oklch(0.97 0.19 115);
   --secondary: oklch(0.235 0 0);
   --secondary-foreground: oklch(1 0 0);
   --muted: oklch(0.235 0 0);
   --muted-foreground: oklch(0.72 0 0);
-  --accent: oklch(0.94 0.221 120);
+  --accent: oklch(0.9388 0.2235 120.28);
   --accent-foreground: oklch(0.145 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.94 0.221 120);
+  --ring: oklch(0.9388 0.2235 120.28);
   --light: oklch(0.968 0 0);
   --gradient-brand: linear-gradient(135deg, var(--primary), var(--primary-glow));
   --glow-brand: 0 0 0 1px color-mix(in oklab, var(--primary) 40%, transparent),
