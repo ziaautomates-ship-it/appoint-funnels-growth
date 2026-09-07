@@ -1,17 +1,18 @@
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Btn } from "./primitives";
 
 const links = [
-  { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
-  { label: "Process", href: "#process" },
-  { label: "Results", href: "#results" },
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "FAQ", href: "#faq" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/#home" },
+  { label: "Services", href: "/#services" },
+  { label: "Process", href: "/#process" },
+  { label: "Results", href: "/#results" },
+  { label: "Calculator", href: "/calculator", route: true },
+  { label: "FAQ", href: "/#faq" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Navbar() {
@@ -37,25 +38,34 @@ export default function Navbar() {
           aria-label="Main"
           className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-4 lg:px-8"
         >
-          <a href="#home" className="flex min-w-0 items-center gap-2.5">
+          <Link to="/" className="flex min-w-0 items-center gap-2.5">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary text-sm font-black text-primary-foreground">
               AF
             </span>
             <span className="truncate text-base font-semibold tracking-tight">
               Appoint Funnels
             </span>
-          </a>
+          </Link>
 
           <div className="hidden items-center gap-8 xl:flex">
             <ul className="flex items-center gap-7 text-sm text-muted-foreground">
               {links.map((l) => (
                 <li key={l.label}>
+                  {l.route ? (
+                    <Link
+                      to={l.href}
+                      className="relative py-1 font-semibold text-primary transition-colors hover:text-primary"
+                    >
+                      {l.label}
+                    </Link>
+                  ) : (
                   <a
                     href={l.href}
                     className="relative py-1 transition-colors hover:text-foreground after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100"
                   >
                     {l.label}
                   </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -82,13 +92,23 @@ export default function Navbar() {
             <ul className="mx-auto flex max-w-7xl flex-col px-5 py-4">
               {links.map((l) => (
                 <li key={l.label}>
-                  <a
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className="block py-3 text-sm text-muted-foreground transition-colors hover:text-primary"
-                  >
-                    {l.label}
-                  </a>
+                  {l.route ? (
+                    <Link
+                      to={l.href}
+                      onClick={() => setOpen(false)}
+                      className="block py-3 text-sm font-semibold text-primary"
+                    >
+                      {l.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={l.href}
+                      onClick={() => setOpen(false)}
+                      className="block py-3 text-sm text-muted-foreground transition-colors hover:text-primary"
+                    >
+                      {l.label}
+                    </a>
+                  )}
                 </li>
               ))}
               <li className="pt-3 pb-2">
