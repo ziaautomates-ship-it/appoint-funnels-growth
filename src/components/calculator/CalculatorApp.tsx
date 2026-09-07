@@ -249,76 +249,56 @@ export default function CalculatorApp() {
             <h2 className="text-lg font-semibold">
               {TABS.find((t) => t.id === kind)?.label} inputs
             </h2>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <div className="mt-6 space-y-1">
               {kind === "email" && (
                 <>
-                  <div>
-                    <label className={labelCls} htmlFor="leadQty">Leads / emails</label>
-                    <input id="leadQty" type="number" min={1000} step={1000} value={inputs.leadQty} onChange={(e) => num("leadQty")(e.target.value)} className={field} />
-                  </div>
-                  <div>
-                    <label className={labelCls} htmlFor="mailboxes">Mailboxes</label>
-                    <input id="mailboxes" type="number" min={1} value={inputs.mailboxes} onChange={(e) => num("mailboxes")(e.target.value)} className={field} />
-                  </div>
+                  <SliderRow label="Leads / emails" value={inputs.leadQty} min={1000} max={200000} step={1000} onChange={numSet("leadQty")} format={(v) => v.toLocaleString()} hint="Scraping + validation scale per 10,000" />
+                  <SliderRow label="Number of mailboxes" value={inputs.mailboxes} min={1} max={100} step={1} onChange={numSet("mailboxes")} format={(v) => `${v}`} hint={`Recommended minimum: ${settings.minMailboxes}`} />
                 </>
               )}
               {kind === "sms" && (
                 <>
-                  <div>
-                    <label className={labelCls} htmlFor="smsQty">SMS / leads</label>
-                    <input id="smsQty" type="number" min={1000} step={1000} value={inputs.smsQty} onChange={(e) => num("smsQty")(e.target.value)} className={field} />
-                  </div>
-                  <div>
-                    <label className={labelCls} htmlFor="phoneNumbers">Mobile phone numbers</label>
-                    <input id="phoneNumbers" type="number" min={1} value={inputs.phoneNumbers} onChange={(e) => num("phoneNumbers")(e.target.value)} className={field} />
-                  </div>
+                  <SliderRow label="SMS / leads" value={inputs.smsQty} min={1000} max={200000} step={1000} onChange={numSet("smsQty")} format={(v) => v.toLocaleString()} hint="All sending costs scale per 10,000" />
+                  <SliderRow label="Mobile phone numbers" value={inputs.phoneNumbers} min={1} max={200} step={1} onChange={numSet("phoneNumbers")} format={(v) => `${v}`} hint={`Recommended minimum: ${settings.minPhoneNumbers}`} />
                 </>
               )}
               {kind === "meta" && (
                 <>
-                  <div>
-                    <label className={labelCls} htmlFor="adSpend">Ad spend</label>
-                    <input id="adSpend" type="number" min={0} step={100} value={inputs.adSpend} onChange={(e) => num("adSpend")(e.target.value)} className={field} />
-                  </div>
-                  <div>
-                    <label className={labelCls} htmlFor="cpl">Cost per lead</label>
-                    <input id="cpl" type="number" min={0.1} step={0.1} value={inputs.costPerLead} onChange={(e) => num("costPerLead")(e.target.value)} className={field} />
-                  </div>
-                  <div>
-                    <label className={labelCls} htmlFor="apptRate">Appointment rate %</label>
-                    <input id="apptRate" type="number" min={0} max={100} value={inputs.metaApptRate} onChange={(e) => num("metaApptRate")(e.target.value)} className={field} />
-                  </div>
-                  <div>
-                    <label className={labelCls} htmlFor="closeRate">Close rate %</label>
-                    <input id="closeRate" type="number" min={0} max={100} value={inputs.metaCloseRate} onChange={(e) => num("metaCloseRate")(e.target.value)} className={field} />
-                  </div>
+                  <SliderRow label="Ad spend" value={inputs.adSpend} min={100} max={100000} step={100} onChange={numSet("adSpend")} format={(v) => `${result.currency}${v.toLocaleString()}`} />
+                  <SliderRow label="Cost per lead" value={inputs.costPerLead} min={0.5} max={100} step={0.5} onChange={numSet("costPerLead")} format={(v) => `${result.currency}${v}`} />
+                  <SliderRow label="Appointment rate" value={inputs.metaApptRate} min={1} max={100} step={1} onChange={numSet("metaApptRate")} format={(v) => `${v}%`} />
+                  <SliderRow label="Close rate" value={inputs.metaCloseRate} min={1} max={100} step={1} onChange={numSet("metaCloseRate")} format={(v) => `${v}%`} />
                 </>
               )}
               {kind === "call" && (
                 <>
-                  <div>
-                    <label className={labelCls} htmlFor="calls">Number of calls</label>
-                    <input id="calls" type="number" min={100} step={100} value={inputs.calls} onChange={(e) => num("calls")(e.target.value)} className={field} />
-                  </div>
-                  <div>
-                    <label className={labelCls} htmlFor="cpc">Cost per call</label>
-                    <input id="cpc" type="number" min={0} step={0.01} value={inputs.costPerCall} onChange={(e) => num("costPerCall")(e.target.value)} className={field} />
-                  </div>
-                  <div>
-                    <label className={labelCls} htmlFor="connect">Connection rate %</label>
-                    <input id="connect" type="number" min={0} max={100} value={inputs.connectRate} onChange={(e) => num("connectRate")(e.target.value)} className={field} />
-                  </div>
-                  <div>
-                    <label className={labelCls} htmlFor="cAppt">Appointment rate % (of connections)</label>
-                    <input id="cAppt" type="number" min={0} max={100} value={inputs.callApptRate} onChange={(e) => num("callApptRate")(e.target.value)} className={field} />
-                  </div>
-                  <div>
-                    <label className={labelCls} htmlFor="cClose">Close rate %</label>
-                    <input id="cClose" type="number" min={0} max={100} value={inputs.callCloseRate} onChange={(e) => num("callCloseRate")(e.target.value)} className={field} />
-                  </div>
+                  <SliderRow label="Number of calls" value={inputs.calls} min={100} max={200000} step={100} onChange={numSet("calls")} format={(v) => v.toLocaleString()} />
+                  <SliderRow label="Cost per call" value={inputs.costPerCall} min={0.05} max={5} step={0.05} onChange={numSet("costPerCall")} format={(v) => `${result.currency}${v.toFixed(2)}`} />
+                  <SliderRow label="Connection rate" value={inputs.connectRate} min={1} max={100} step={1} onChange={numSet("connectRate")} format={(v) => `${v}%`} />
+                  <SliderRow label="Appointment rate (of connections)" value={inputs.callApptRate} min={1} max={100} step={1} onChange={numSet("callApptRate")} format={(v) => `${v}%`} />
+                  <SliderRow label="Close rate" value={inputs.callCloseRate} min={1} max={100} step={1} onChange={numSet("callCloseRate")} format={(v) => `${v}%`} />
                 </>
               )}
             </div>
+
+            {/* Live funnel readout */}
+            <div className="mt-6 rounded-2xl border border-border bg-background/50 p-5">
+              <div className="space-y-2.5">
+                {result.funnel.map((f) => (
+                  <div key={f.label} className="flex items-baseline justify-between gap-4 text-sm">
+                    <span className="text-muted-foreground">{f.label}</span>
+                    <span className="font-semibold text-foreground">{f.value}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 flex items-baseline justify-between gap-4 border-t border-border pt-4">
+                <span className="text-sm font-semibold">Total investment</span>
+                <span className="font-display text-3xl leading-none text-primary">
+                  {money(result.currency, result.total)}
+                </span>
+              </div>
+            </div>
+
 
             {result.capacity.length > 0 && (
               <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
