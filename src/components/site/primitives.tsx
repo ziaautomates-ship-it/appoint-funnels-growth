@@ -62,6 +62,8 @@ type BtnProps = {
   variant?: "primary" | "secondary";
   className?: string;
   type?: "button" | "submit";
+  target?: string;
+  rel?: string;
 };
 
 export function Btn({
@@ -70,6 +72,8 @@ export function Btn({
   variant = "primary",
   className,
   type,
+  target,
+  rel,
 }: BtnProps) {
   const base =
     "group inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold tracking-wide transition-all duration-300 will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
@@ -86,7 +90,7 @@ export function Btn({
     );
   }
   return (
-    <a href={href} className={cn(base, styles, className)}>
+    <a href={href} target={target} rel={rel} className={cn(base, styles, className)}>
       {children}
     </a>
   );

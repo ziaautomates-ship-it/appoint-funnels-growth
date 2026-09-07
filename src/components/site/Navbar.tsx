@@ -69,7 +69,7 @@ export default function Navbar() {
                 </li>
               ))}
             </ul>
-            <Btn className="px-6 py-3">Book a Call</Btn>
+            <Btn href="https://cal.com/appointfunnels/discoverycall" target="_blank" rel="noopener noreferrer" className="px-6 py-3">Book a Call</Btn>
           </div>
 
           <button
@@ -112,7 +112,7 @@ export default function Navbar() {
                 </li>
               ))}
               <li className="pt-3 pb-2">
-                <Btn className="w-full">Book a Call</Btn>
+                <Btn href="https://cal.com/appointfunnels/discoverycall" target="_blank" rel="noopener noreferrer" className="w-full">Book a Call</Btn>
               </li>
             </ul>
           </motion.div>
