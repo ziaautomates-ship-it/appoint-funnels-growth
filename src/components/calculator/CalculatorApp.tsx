@@ -55,6 +55,7 @@ export default function CalculatorApp() {
   const [client, setClient] = useState({ name: "", company: "", email: "", country: "Pakistan" });
   const [showResults, setShowResults] = useState(false);
   const [sendState, setSendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [revenuePerClose, setRevenuePerClose] = useState(1500);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const [inputs, setInputs] = useState<Omit<Inputs, "kind" | "country">>({
