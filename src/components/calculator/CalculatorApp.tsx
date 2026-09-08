@@ -278,6 +278,21 @@ export default function CalculatorApp() {
             <h2 className="text-lg font-semibold">
               {TABS.find((t) => t.id === kind)?.label} inputs
             </h2>
+
+            <div className="mt-6 grid grid-cols-3 gap-3">
+              {chips.map((c) => (
+                <div
+                  key={c.label}
+                  className="rounded-2xl border border-border bg-background/50 px-3 py-4 text-center"
+                >
+                  <p className="font-display text-2xl leading-none text-primary">{c.value}</p>
+                  <p className="mt-2 text-[0.62rem] uppercase tracking-[0.16em] text-muted-foreground">
+                    {c.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+
             <div className="mt-6 space-y-1">
               {kind === "email" && (
                 <>
