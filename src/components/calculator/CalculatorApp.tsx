@@ -55,6 +55,7 @@ export default function CalculatorApp() {
   const [client, setClient] = useState({ name: "", company: "", email: "", country: "Pakistan" });
   const [showResults, setShowResults] = useState(false);
   const [sendState, setSendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [revenuePerClose, setRevenuePerClose] = useState(1500);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const [inputs, setInputs] = useState<Omit<Inputs, "kind" | "country">>({
@@ -172,6 +173,8 @@ export default function CalculatorApp() {
         roiGuarantee: result.roi > 0 ? `${result.roi}x` : "Configurable — not finalised",
         timelineDays: result.timeline,
       },
+      revenuePerClosedClient: revenuePerClose,
+      expectedRevenueRange: { low: expectedRevenueLow, high: expectedRevenue },
       funnel: result.funnel,
       capacity: result.capacity,
       warnings: result.warnings,
@@ -191,8 +194,36 @@ export default function CalculatorApp() {
     }
   }
 
-  const num = (k: keyof typeof inputs) => (v: string) =>
-    setInputs((p) => ({ ...p, [k]: Number(v) || 0 }));
+  const numSet = (k: keyof typeof inputs) => (v: number) =>
+    setInputs((p) => ({ ...p, [k]: v }));
+
+  const expectedRevenue = Math.round(result.clients * revenuePerClose);
+  const expectedRevenueLow = Math.round(Math.max(0, result.clients - 1) * revenuePerClose);
+
+  const chips: { value: string; label: string }[] =
+    kind === "email"
+      ? [
+          { value: `${settings.emailsPerMailboxPerDay}/day`, label: "Per mailbox" },
+          { value: `${settings.emailApptsPer10k}`, label: "Appts / 10k" },
+          { value: `${settings.emailRoi}x`, label: "Min ROI" },
+        ]
+      : kind === "sms"
+        ? [
+            { value: `${settings.smsPerNumberPerDay}/day`, label: "Per number" },
+            { value: `${settings.smsApptsPer10k}`, label: "Appts / 10k" },
+            { value: `${settings.smsRoi}x`, label: "Min ROI" },
+          ]
+        : kind === "meta"
+          ? [
+              { value: `${inputs.metaApptRate}%`, label: "Appt rate" },
+              { value: `${inputs.metaCloseRate}%`, label: "Close rate" },
+              { value: settings.metaRoi > 0 ? `${settings.metaRoi}x` : "TBC", label: "Min ROI" },
+            ]
+          : [
+              { value: `${inputs.connectRate}%`, label: "Connect rate" },
+              { value: `${inputs.callCloseRate}%`, label: "Close rate" },
+              { value: `${settings.callRoi}x`, label: "Min ROI" },
+            ];
 
   return (
     <>
@@ -249,6 +280,21 @@ export default function CalculatorApp() {
             <h2 className="text-lg font-semibold">
               {TABS.find((t) => t.id === kind)?.label} inputs
             </h2>
+
+            <div className="mt-6 grid grid-cols-3 gap-3">
+              {chips.map((c) => (
+                <div
+                  key={c.label}
+                  className="rounded-2xl border border-border bg-background/50 px-3 py-4 text-center"
+                >
+                  <p className="font-display text-2xl leading-none text-primary">{c.value}</p>
+                  <p className="mt-2 text-[0.62rem] uppercase tracking-[0.16em] text-muted-foreground">
+                    {c.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+
             <div className="mt-6 space-y-1">
               {kind === "email" && (
                 <>
@@ -279,6 +325,16 @@ export default function CalculatorApp() {
                   <SliderRow label="Close rate" value={inputs.callCloseRate} min={1} max={100} step={1} onChange={numSet("callCloseRate")} format={(v) => `${v}%`} />
                 </>
               )}
+              <SliderRow
+                label="Revenue per closed client"
+                value={revenuePerClose}
+                min={100}
+                max={50000}
+                step={100}
+                onChange={setRevenuePerClose}
+                format={(v) => `${result.currency}${v.toLocaleString()}`}
+                hint="Used to project your expected revenue"
+              />
             </div>
 
             {/* Live funnel readout */}
@@ -292,9 +348,16 @@ export default function CalculatorApp() {
                 ))}
               </div>
               <div className="mt-4 flex items-baseline justify-between gap-4 border-t border-border pt-4">
-                <span className="text-sm font-semibold">Total investment</span>
-                <span className="font-display text-3xl leading-none text-primary">
+                <span className="text-sm text-muted-foreground">Total investment</span>
+                <span className="font-semibold text-foreground">
                   {money(result.currency, result.total)}
+                </span>
+              </div>
+              <div className="mt-3 flex items-baseline justify-between gap-4">
+                <span className="text-sm font-semibold">Expected revenue</span>
+                <span className="font-display text-3xl leading-none text-primary">
+                  {money(result.currency, expectedRevenueLow)} –{" "}
+                  {money(result.currency, expectedRevenue)}
                 </span>
               </div>
             </div>
@@ -661,6 +724,54 @@ function GuaranteeCard({
       </span>
       <h3 className="mt-5 text-base font-semibold">{title}</h3>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{body}</p>
+    </div>
+  );
+}
+
+function SliderRow({
+  label,
+  value,
+  min,
+  max,
+  step,
+  onChange,
+  format,
+  hint,
+}: {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  onChange: (v: number) => void;
+  format: (v: number) => string;
+  hint?: string;
+}) {
+  const pct = Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
+  return (
+    <div className="py-4">
+      <div className="flex items-baseline justify-between gap-4">
+        <label className="text-sm font-medium text-muted-foreground">{label}</label>
+        <span className="font-display text-2xl leading-none text-primary">{format(value)}</span>
+      </div>
+      <div className="relative mt-3 h-2">
+        <div className="absolute inset-0 rounded-full bg-border" />
+        <div
+          className="absolute inset-y-0 left-0 rounded-full bg-primary"
+          style={{ width: `${pct}%` }}
+        />
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          aria-label={label}
+          className="absolute inset-0 h-2 w-full cursor-pointer appearance-none bg-transparent [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-background [&::-webkit-slider-thumb]:shadow-[var(--glow-brand)] [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-background"
+        />
+      </div>
+      {hint && <p className="mt-2 text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
 }
