@@ -323,6 +323,16 @@ export default function CalculatorApp() {
                   <SliderRow label="Close rate" value={inputs.callCloseRate} min={1} max={100} step={1} onChange={numSet("callCloseRate")} format={(v) => `${v}%`} />
                 </>
               )}
+              <SliderRow
+                label="Revenue per closed client"
+                value={revenuePerClose}
+                min={100}
+                max={50000}
+                step={100}
+                onChange={setRevenuePerClose}
+                format={(v) => `${result.currency}${v.toLocaleString()}`}
+                hint="Used to project your expected revenue"
+              />
             </div>
 
             {/* Live funnel readout */}
