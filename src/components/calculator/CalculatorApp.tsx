@@ -173,6 +173,8 @@ export default function CalculatorApp() {
         roiGuarantee: result.roi > 0 ? `${result.roi}x` : "Configurable — not finalised",
         timelineDays: result.timeline,
       },
+      revenuePerClosedClient: revenuePerClose,
+      expectedRevenueRange: { low: expectedRevenueLow, high: expectedRevenue },
       funnel: result.funnel,
       capacity: result.capacity,
       warnings: result.warnings,
