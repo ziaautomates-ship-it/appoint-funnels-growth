@@ -191,8 +191,36 @@ export default function CalculatorApp() {
     }
   }
 
-  const num = (k: keyof typeof inputs) => (v: string) =>
-    setInputs((p) => ({ ...p, [k]: Number(v) || 0 }));
+  const numSet = (k: keyof typeof inputs) => (v: number) =>
+    setInputs((p) => ({ ...p, [k]: v }));
+
+  const expectedRevenue = Math.round(result.clients * revenuePerClose);
+  const expectedRevenueLow = Math.round(Math.max(0, result.clients - 1) * revenuePerClose);
+
+  const chips: { value: string; label: string }[] =
+    kind === "email"
+      ? [
+          { value: `${settings.emailsPerMailboxPerDay}/day`, label: "Per mailbox" },
+          { value: `${settings.emailApptsPer10k}`, label: "Appts / 10k" },
+          { value: `${settings.emailRoi}x`, label: "Min ROI" },
+        ]
+      : kind === "sms"
+        ? [
+            { value: `${settings.smsPerNumberPerDay}/day`, label: "Per number" },
+            { value: `${settings.smsApptsPer10k}`, label: "Appts / 10k" },
+            { value: `${settings.smsRoi}x`, label: "Min ROI" },
+          ]
+        : kind === "meta"
+          ? [
+              { value: `${inputs.metaApptRate}%`, label: "Appt rate" },
+              { value: `${inputs.metaCloseRate}%`, label: "Close rate" },
+              { value: settings.metaRoi > 0 ? `${settings.metaRoi}x` : "TBC", label: "Min ROI" },
+            ]
+          : [
+              { value: `${inputs.connectRate}%`, label: "Connect rate" },
+              { value: `${inputs.callCloseRate}%`, label: "Close rate" },
+              { value: `${settings.callRoi}x`, label: "Min ROI" },
+            ];
 
   return (
     <>
