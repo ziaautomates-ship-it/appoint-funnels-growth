@@ -346,9 +346,16 @@ export default function CalculatorApp() {
                 ))}
               </div>
               <div className="mt-4 flex items-baseline justify-between gap-4 border-t border-border pt-4">
-                <span className="text-sm font-semibold">Total investment</span>
-                <span className="font-display text-3xl leading-none text-primary">
+                <span className="text-sm text-muted-foreground">Total investment</span>
+                <span className="font-semibold text-foreground">
                   {money(result.currency, result.total)}
+                </span>
+              </div>
+              <div className="mt-3 flex items-baseline justify-between gap-4">
+                <span className="text-sm font-semibold">Expected revenue</span>
+                <span className="font-display text-3xl leading-none text-primary">
+                  {money(result.currency, expectedRevenueLow)} –{" "}
+                  {money(result.currency, expectedRevenue)}
                 </span>
               </div>
             </div>
