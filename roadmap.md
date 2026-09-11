@@ -1,0 +1,5 @@
+- [ ] Add logo and favicon
+- [ ] Add Privacy Policy page and link
+- [ ] Replace palette UI with chatbot while retaining palette code
+- [ ] Update calculator inputs, pricing, free items, settings, and proposal payload
+- [ ] Verify calculator, chat, policy, logo, and responsive layouts
