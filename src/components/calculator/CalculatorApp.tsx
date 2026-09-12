@@ -72,6 +72,8 @@ export default function CalculatorApp() {
     connectRate: 25,
     callApptRate: 15,
     callCloseRate: 20,
+    agents: 5,
+    hoursPerAgent: 40,
   });
 
   useEffect(() => {
@@ -88,6 +90,8 @@ export default function CalculatorApp() {
       connectRate: s.callConnectRate,
       callApptRate: s.callApptRate,
       callCloseRate: s.callCloseRate,
+        agents: 5,
+        hoursPerAgent: 40,
     }));
   }, []);
 
@@ -144,6 +148,8 @@ export default function CalculatorApp() {
         connectionRate: inputs.connectRate,
         callAppointmentRate: inputs.callApptRate,
         callCloseRate: inputs.callCloseRate,
+        agents: inputs.agents,
+        hoursPerAgent: inputs.hoursPerAgent,
       },
       pricing: {
         currency: result.currency,
@@ -155,6 +161,15 @@ export default function CalculatorApp() {
         phoneNumbersMonthlyCost:
           Math.round(inputs.phoneNumbers * settings.phoneNumberPrice * 100) / 100,
         monthlyRecurringFee: settings.monthlyRecurring,
+        mailboxPrice: settings.mailboxPrice,
+        mailboxMonthlyCost: Math.round(inputs.mailboxes * settings.mailboxPrice * 100) / 100,
+        domainPrice: settings.domainPrice,
+        domainCost: Math.round(inputs.mailboxes * settings.domainPrice * 100) / 100,
+        instantlyPlanPrice: settings.instantlyPlanPrice,
+        emailPersonalizationPricePer10k: settings.emailPersonalizationPricePer10k,
+        callAgentHourlyRate: settings.callAgentHourlyRate,
+        callAgentLaborCost:
+          Math.round(inputs.agents * inputs.hoursPerAgent * settings.callAgentHourlyRate * 100) / 100,
         setupFee: result.oneTimeTotal,
       },
       investment: {
@@ -298,14 +313,14 @@ export default function CalculatorApp() {
             <div className="mt-6 space-y-1">
               {kind === "email" && (
                 <>
-                  <SliderRow label="Leads / emails" value={inputs.leadQty} min={1000} max={200000} step={1000} onChange={numSet("leadQty")} format={(v) => v.toLocaleString()} hint="Scraping + validation scale per 10,000" />
                   <SliderRow label="Number of mailboxes" value={inputs.mailboxes} min={1} max={100} step={1} onChange={numSet("mailboxes")} format={(v) => `${v}`} hint={`Recommended minimum: ${settings.minMailboxes}`} />
+                  <SliderRow label="Leads / emails" value={inputs.leadQty} min={1000} max={200000} step={1000} onChange={numSet("leadQty")} format={(v) => v.toLocaleString()} hint="Scraping, verification and personalization scale per 10,000" />
                 </>
               )}
               {kind === "sms" && (
                 <>
-                  <SliderRow label="SMS / leads" value={inputs.smsQty} min={1000} max={200000} step={1000} onChange={numSet("smsQty")} format={(v) => v.toLocaleString()} hint="All sending costs scale per 10,000" />
                   <SliderRow label="Mobile phone numbers" value={inputs.phoneNumbers} min={1} max={200} step={1} onChange={numSet("phoneNumbers")} format={(v) => `${v}`} hint={`Recommended minimum: ${settings.minPhoneNumbers}`} />
+                  <SliderRow label="SMS / leads" value={inputs.smsQty} min={1000} max={200000} step={1000} onChange={numSet("smsQty")} format={(v) => v.toLocaleString()} hint="All sending costs scale per 10,000" />
                 </>
               )}
               {kind === "meta" && (
@@ -318,6 +333,8 @@ export default function CalculatorApp() {
               )}
               {kind === "call" && (
                 <>
+                  <SliderRow label="Number of agents" value={inputs.agents} min={1} max={50} step={1} onChange={numSet("agents")} format={(v) => `${v}`} />
+                  <SliderRow label="Hours per agent" value={inputs.hoursPerAgent} min={1} max={200} step={1} onChange={numSet("hoursPerAgent")} format={(v) => `${v} hours`} hint={`${result.currency}${settings.callAgentHourlyRate} per agent-hour`} />
                   <SliderRow label="Number of calls" value={inputs.calls} min={100} max={200000} step={100} onChange={numSet("calls")} format={(v) => v.toLocaleString()} />
                   <SliderRow label="Cost per call" value={inputs.costPerCall} min={0.05} max={5} step={0.05} onChange={numSet("costPerCall")} format={(v) => `${result.currency}${v.toFixed(2)}`} />
                   <SliderRow label="Connection rate" value={inputs.connectRate} min={1} max={100} step={1} onChange={numSet("connectRate")} format={(v) => `${v}%`} />
@@ -461,8 +478,8 @@ export default function CalculatorApp() {
 
                 <div className="mt-8 grid gap-5 lg:grid-cols-2">
                   <Bucket title="One-Time Costs" lines={result.oneTime} total={result.oneTimeTotal} currency={result.currency} empty="No setup or service charge for your country." />
-                  <Bucket title="Campaign Costs" lines={result.campaign} total={result.campaignTotal} currency={result.currency} />
-                  <Bucket title="Monthly Costs" lines={result.monthly} total={result.monthlyTotal} currency={result.currency} />
+                   <Bucket title="Tools Stack Investment" lines={result.campaign} total={result.campaignTotal} currency={result.currency} />
+                   <Bucket title="Monthly Costs" lines={result.monthly} total={result.monthlyTotal} currency={result.currency} informational={kind === "email"} />
                   <div className="rounded-3xl border border-primary/40 bg-primary/10 p-7">
                     <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">Included Free</h3>
                     <ul className="mt-5 space-y-3 text-sm">
@@ -475,7 +492,9 @@ export default function CalculatorApp() {
                             {f.label}
                             {f.note && <span className="block text-xs text-muted-foreground">{f.note}</span>}
                           </span>
-                          <span className="shrink-0 font-semibold">{money("$", f.amount)} value — FREE</span>
+                           <span className="shrink-0 font-semibold">
+                             {f.amount > 0 ? `${money(result.currency, f.amount)} value — FREE` : "Included FREE"}
+                           </span>
                         </li>
                       ))}
                     </ul>
@@ -490,7 +509,7 @@ export default function CalculatorApp() {
                     <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Total investment</p>
                     <p className="display-xl mt-3 text-6xl">{money(result.currency, result.total)}</p>
                     <p className="mt-3 text-sm text-muted-foreground">
-                      One-time {money(result.currency, result.oneTimeTotal)} · Campaign{" "}
+                       One-time {money(result.currency, result.oneTimeTotal)} · Tools stack{" "}
                       {money(result.currency, result.campaignTotal)} · Monthly{" "}
                       {money(result.currency, result.monthlyTotal)}
                     </p>
@@ -613,8 +632,9 @@ export default function CalculatorApp() {
                     settled.
                   </li>
                   <li>
-                    {money(result.currency, settings.monthlyRecurring)}/month recurring cost begins
-                    from Month 2 onward.
+                    {kind === "email"
+                      ? `${money(result.currency, settings.instantlyPlanPrice)}/month Instantly Cold Emailing Software is included in the tools stack investment.`
+                      : `${money(result.currency, settings.monthlyRecurring)}/month recurring cost begins from Month 2 onward.`}
                   </li>
                 </ul>
               </div>
@@ -678,12 +698,14 @@ function Bucket({
   total,
   currency,
   empty,
+  informational = false,
 }: {
   title: string;
   lines: { label: string; amount: number; note?: string }[];
   total: number;
   currency: string;
   empty?: string;
+  informational?: boolean;
 }) {
   return (
     <div className="rounded-3xl border border-border bg-surface/60 p-7">
@@ -702,7 +724,7 @@ function Bucket({
       </ul>
       <p className="mt-5 flex justify-between border-t border-border pt-4 text-sm font-semibold">
         <span>Subtotal</span>
-        <span>{money(currency, total)}</span>
+         <span>{informational ? "Included above" : money(currency, total)}</span>
       </p>
     </div>
   );
