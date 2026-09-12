@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Btn } from "./primitives";
+import logoAsset from "@/assets/appoint-funnels-logo.png.asset.json";
 
 const links = [
   { label: "Home", href: "/#home" },
@@ -39,9 +40,7 @@ export default function Navbar() {
           className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-4 lg:px-8"
         >
           <Link to="/" className="flex min-w-0 items-center gap-2.5">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary text-sm font-black text-primary-foreground">
-              AF
-            </span>
+            <img src={logoAsset.url} alt="Appoint Funnels logo" className="h-9 w-9 shrink-0 rounded-lg object-cover" />
             <span className="truncate text-base font-semibold tracking-tight">
               Appoint Funnels
             </span>

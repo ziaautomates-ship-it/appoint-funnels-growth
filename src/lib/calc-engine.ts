@@ -26,6 +26,8 @@ export type Inputs = {
   connectRate: number;
   callApptRate: number;
   callCloseRate: number;
+  agents: number;
+  hoursPerAgent: number;
 };
 
 export type CalcResult = {
@@ -75,9 +77,19 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
 
   if (inputs.kind === "email") {
     const k = inputs.leadQty / 10000;
+    const mailboxCost = r2(inputs.mailboxes * s.mailboxPrice);
+    const domainCost = r2(inputs.mailboxes * s.domainPrice);
+    campaign.push({ label: `Mailboxes (${inputs.mailboxes})`, amount: mailboxCost, note: `${currency}${s.mailboxPrice} per mailbox / month` });
+    campaign.push({ label: `Domains (${inputs.mailboxes})`, amount: domainCost, note: `${currency}${s.domainPrice} per domain` });
+    campaign.push({ label: "Instantly Hyper Growth Plan (Split)", amount: s.instantlyPlanPrice, note: "Monthly emailing software" });
     campaign.push({ label: `Lead scraping (${inputs.leadQty.toLocaleString()} leads)`, amount: r2(k * s.leadPricePer10k), note: `${currency}${s.leadPricePer10k} per 10,000` });
     campaign.push({ label: `Email validation (${inputs.leadQty.toLocaleString()})`, amount: r2(k * s.validationPricePer10k), note: `${currency}${s.validationPricePer10k} per 10,000` });
-    monthly.push({ label: `Mailboxes (${inputs.mailboxes})`, amount: r2(inputs.mailboxes * s.mailboxPrice), note: `${currency}${s.mailboxPrice} per mailbox / month` });
+    campaign.push({ label: "Email personalization credits", amount: r2(k * s.emailPersonalizationPricePer10k), note: `${currency}${s.emailPersonalizationPricePer10k} per 10,000` });
+    monthly.push({ label: `Mailboxes (${inputs.mailboxes})`, amount: mailboxCost, note: "Shown in Tools Stack Investment; not charged twice" });
+    monthly.push({ label: "Instantly Hyper Growth Plan (Split)", amount: s.instantlyPlanPrice, note: "Shown in Tools Stack Investment; not charged twice" });
+    free.push({ label: "Own sending servers", amount: s.ownServersValue, note: "Included FREE" });
+    free.push({ label: "Traditional marketing technique", amount: 0, note: "Included FREE" });
+    free.push({ label: "No management and service fee", amount: s.noManagementFeeValue, note: `${currency}${s.noManagementFeeValue.toLocaleString()} value — Included FREE` });
     if (inputs.mailboxes < s.minMailboxes) {
       warnings.push(`${inputs.mailboxes} mailboxes may not provide enough sending capacity for this campaign (recommended minimum ${s.minMailboxes}).`);
     }
@@ -132,6 +144,7 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
   }
 
   if (inputs.kind === "call") {
+    campaign.push({ label: `Agent time (${inputs.agents} agents × ${inputs.hoursPerAgent} hours)`, amount: r2(inputs.agents * inputs.hoursPerAgent * s.callAgentHourlyRate), note: `${currency}${s.callAgentHourlyRate} per agent-hour` });
     campaign.push({ label: `Calling cost (${inputs.calls.toLocaleString()} calls)`, amount: r2(inputs.calls * inputs.costPerCall), note: `${currency}${inputs.costPerCall} per call` });
     const connections = Math.round((inputs.calls * inputs.connectRate) / 100);
     appointments = Math.round((connections * inputs.callApptRate) / 100);
@@ -144,11 +157,13 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
     funnel.push({ label: `Clients (${inputs.callCloseRate}% close rate)`, value: String(clients) });
   }
 
-  monthly.push({
-    label: `Platform & management retainer`,
-    amount: s.monthlyRecurring,
-    note: `${currency}${s.monthlyRecurring}/month from Month 2 onward`,
-  });
+  if (inputs.kind !== "email") {
+    monthly.push({
+      label: "Platform & management retainer",
+      amount: s.monthlyRecurring,
+      note: `${currency}${s.monthlyRecurring}/month from Month 2 onward`,
+    });
+  }
 
   for (const e of s.extras) {
     if (e.appliesTo !== "all" && e.appliesTo !== inputs.kind) continue;
@@ -162,7 +177,7 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
   const sum = (l: Line[]) => r2(l.reduce((a, b) => a + b.amount, 0));
   const oneTimeTotal = sum(oneTime);
   const campaignTotal = sum(campaign);
-  const monthlyTotal = sum(monthly);
+  const monthlyTotal = inputs.kind === "email" ? 0 : sum(monthly);
 
   return {
     currency,

@@ -21,6 +21,11 @@ export type CalcSettings = {
   smsAccountValue: number;
   // Email infrastructure
   mailboxPrice: number;
+  domainPrice: number;
+  instantlyPlanPrice: number;
+  emailPersonalizationPricePer10k: number;
+  ownServersValue: number;
+  noManagementFeeValue: number;
   minMailboxes: number;
   emailsPerMailboxPerDay: number;
   // Setup fees
@@ -48,6 +53,7 @@ export type CalcSettings = {
   metaCloseRate: number; // %
   // Call centre pricing / assumptions
   callCostPerCall: number;
+  callAgentHourlyRate: number;
   callConnectRate: number; // %
   callApptRate: number; // % of connections
   callCloseRate: number; // % of appointments
@@ -66,6 +72,11 @@ export const DEFAULT_SETTINGS: CalcSettings = {
   smsPerNumberPerDay: 30,
   smsAccountValue: 800,
   mailboxPrice: 3,
+  domainPrice: 10,
+  instantlyPlanPrice: 50,
+  emailPersonalizationPricePer10k: 10,
+  ownServersValue: 0,
+  noManagementFeeValue: 1000,
   minMailboxes: 10,
   emailsPerMailboxPerDay: 30,
   usSetupFee: 2500,
@@ -87,6 +98,7 @@ export const DEFAULT_SETTINGS: CalcSettings = {
   metaApptRate: 35,
   metaCloseRate: 25,
   callCostPerCall: 0.35,
+  callAgentHourlyRate: 10,
   callConnectRate: 25,
   callApptRate: 15,
   callCloseRate: 20,

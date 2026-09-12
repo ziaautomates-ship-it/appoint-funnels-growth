@@ -48,6 +48,14 @@ const SIGNATURE_SWATCH: Swatch = {
   h: 120.28,
 };
 
+const MIDNIGHT_SWATCH: Swatch = {
+  id: "midnight-010107",
+  label: "Midnight #010107",
+  l: 0.075,
+  c: 0.025,
+  h: 285,
+};
+
 function swatchToHex(s: Swatch): string {
   const el = document.createElement("span");
   el.style.color = `oklch(${s.l} ${s.c} ${s.h})`;
@@ -80,7 +88,7 @@ function applySwatch(s: Swatch) {
 
 export default function ThemeSwitcher() {
   const [open, setOpen] = useState(false);
-  const palette = useMemo(() => [SIGNATURE_SWATCH, ...buildPalette()], []);
+  const palette = useMemo(() => [SIGNATURE_SWATCH, ...buildPalette(), MIDNIGHT_SWATCH], []);
   const [active, setActive] = useState(DEFAULT_ID);
   const [hex, setHex] = useState("#D8FF00");
   const [hexes, setHexes] = useState<Record<string, string>>({});
