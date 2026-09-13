@@ -58,7 +58,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
             >
-              On Autopilot
+              WITH AI-SYSTEMS
             </motion.span>
           </h1>
 
