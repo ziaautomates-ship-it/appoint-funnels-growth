@@ -50,7 +50,12 @@ export default function Chatbot() {
                   <p className="text-xs text-muted-foreground">Ask about your growth plan</p>
                 </div>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Close assistant">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setOpen(false)}
+                aria-label="Close assistant"
+              >
                 <X />
               </Button>
             </header>
@@ -59,7 +64,11 @@ export default function Chatbot() {
               <ConversationContent className="gap-5 p-4">
                 {messages.length === 0 && (
                   <div className="my-auto px-3 text-center">
-                    <img src={logoAsset.url} alt="Appoint Funnels" className="mx-auto h-14 w-14 rounded-xl object-cover" />
+                    <img
+                      src={logoAsset.url}
+                      alt="Appoint Funnels"
+                      className="mx-auto h-14 w-14 rounded-xl object-cover"
+                    />
                     <p className="mt-4 text-sm font-semibold">How can we help?</p>
                     <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                       Ask about pricing, outreach channels, guarantees, or your calculator results.
@@ -71,7 +80,9 @@ export default function Chatbot() {
                     <MessageContent>
                       {message.parts.map((part, index) =>
                         part.type === "text" ? (
-                          <MessageResponse key={`${message.id}-${index}`}>{part.text}</MessageResponse>
+                          <MessageResponse key={`${message.id}-${index}`}>
+                            {part.text}
+                          </MessageResponse>
                         ) : null,
                       )}
                     </MessageContent>
@@ -94,7 +105,11 @@ export default function Chatbot() {
                   await sendMessage({ text: text.trim() });
                 }}
               >
-                <PromptInputTextarea ref={textareaRef} placeholder="Ask Appoint Funnels…" className="min-h-20" />
+                <PromptInputTextarea
+                  ref={textareaRef}
+                  placeholder="Ask Appoint Funnels…"
+                  className="min-h-20"
+                />
                 <PromptInputFooter className="justify-end">
                   <PromptInputSubmit status={status} onStop={stop} />
                 </PromptInputFooter>

@@ -40,10 +40,12 @@ export default function Navbar() {
           className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-4 lg:px-8"
         >
           <Link to="/" className="flex min-w-0 items-center gap-2.5">
-            <img src={logoAsset.url} alt="Appoint Funnels logo" className="h-9 w-9 shrink-0 rounded-lg object-cover" />
-            <span className="truncate text-base font-semibold tracking-tight">
-              Appoint Funnels
-            </span>
+            <img
+              src={logoAsset.url}
+              alt="Appoint Funnels logo"
+              className="h-9 w-9 shrink-0 rounded-lg object-cover"
+            />
+            <span className="truncate text-base font-semibold tracking-tight">Appoint Funnels</span>
           </Link>
 
           <div className="hidden items-center gap-8 xl:flex">
@@ -58,17 +60,24 @@ export default function Navbar() {
                       {l.label}
                     </Link>
                   ) : (
-                  <a
-                    href={l.href}
-                    className="relative py-1 transition-colors hover:text-foreground after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100"
-                  >
-                    {l.label}
-                  </a>
+                    <a
+                      href={l.href}
+                      className="relative py-1 transition-colors hover:text-foreground after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100"
+                    >
+                      {l.label}
+                    </a>
                   )}
                 </li>
               ))}
             </ul>
-            <Btn href="https://cal.com/appointfunnels/discoverycall" target="_blank" rel="noopener noreferrer" className="px-6 py-3">Book a Call</Btn>
+            <Btn
+              href="https://cal.com/appointfunnels/discoverycall"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3"
+            >
+              Book a Call
+            </Btn>
           </div>
 
           <button
@@ -111,7 +120,14 @@ export default function Navbar() {
                 </li>
               ))}
               <li className="pt-3 pb-2">
-                <Btn href="https://cal.com/appointfunnels/discoverycall" target="_blank" rel="noopener noreferrer" className="w-full">Book a Call</Btn>
+                <Btn
+                  href="https://cal.com/appointfunnels/discoverycall"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full"
+                >
+                  Book a Call
+                </Btn>
               </li>
             </ul>
           </motion.div>

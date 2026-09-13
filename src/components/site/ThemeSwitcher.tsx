@@ -6,10 +6,30 @@ import { cn } from "@/lib/utils";
 type Swatch = { id: string; label: string; l: number; c: number; h: number };
 
 const HUE_NAMES = [
-  "Crimson", "Ember", "Sunset", "Amber", "Gold", "Citrus",
-  "Lime", "Fern", "Emerald", "Jade", "Teal", "Aqua",
-  "Cyan", "Sky", "Azure", "Brand Blue", "Indigo", "Violet",
-  "Purple", "Orchid", "Fuchsia", "Magenta", "Rose", "Ruby",
+  "Crimson",
+  "Ember",
+  "Sunset",
+  "Amber",
+  "Gold",
+  "Citrus",
+  "Lime",
+  "Fern",
+  "Emerald",
+  "Jade",
+  "Teal",
+  "Aqua",
+  "Cyan",
+  "Sky",
+  "Azure",
+  "Brand Blue",
+  "Indigo",
+  "Violet",
+  "Purple",
+  "Orchid",
+  "Fuchsia",
+  "Magenta",
+  "Rose",
+  "Ruby",
 ];
 
 // 25 hue steps x 40 tone/saturation steps = 1000 colors
@@ -66,8 +86,7 @@ function swatchToHex(s: Swatch): string {
   if (!m) return "#D8FF00";
   const [r, g, b] = m.map(Number) as [number, number, number];
   return (
-    "#" +
-    [r, g, b].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("")
+    "#" + [r, g, b].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("")
   ).toUpperCase();
 }
 
@@ -80,10 +99,7 @@ function applySwatch(s: Swatch) {
     `oklch(${Math.min(0.92, s.l + 0.12)} ${Math.max(0.02, s.c - 0.01)} ${s.h})`,
   );
   root.style.setProperty("--ring", `oklch(${s.l} ${s.c} ${s.h})`);
-  root.style.setProperty(
-    "--primary-foreground",
-    s.l > 0.72 ? "oklch(0.145 0 0)" : "oklch(1 0 0)",
-  );
+  root.style.setProperty("--primary-foreground", s.l > 0.72 ? "oklch(0.145 0 0)" : "oklch(1 0 0)");
 }
 
 export default function ThemeSwitcher() {
