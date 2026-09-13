@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/site/Navbar";
 import Contact from "@/components/site/Contact";
 import Footer from "@/components/site/Footer";
-import ThemeSwitcher from "@/components/site/ThemeSwitcher";
+import Chatbot from "@/components/site/Chatbot";
 import CalculatorApp from "@/components/calculator/CalculatorApp";
 
 export const Route = createFileRoute("/calculator")({
@@ -37,7 +37,7 @@ function CalculatorPage() {
         <Contact />
       </main>
       <Footer />
-      <ThemeSwitcher />
+      <Chatbot />
       <Toaster />
     </div>
   );
