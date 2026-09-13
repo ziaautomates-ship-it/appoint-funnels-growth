@@ -106,13 +106,13 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
     });
     monthly.push({
       label: `Mailboxes (${inputs.mailboxes})`,
-      amount: mailboxCost,
-      note: "Shown in Tools Stack Investment; not charged twice",
+      amount: 0,
+      note: `${currency}${mailboxCost.toLocaleString()} monthly value — included in Tools Stack Investment`,
     });
     monthly.push({
       label: "Instantly Hyper Growth Plan (Split)",
-      amount: s.instantlyPlanPrice,
-      note: "Shown in Tools Stack Investment; not charged twice",
+      amount: 0,
+      note: `${currency}${s.instantlyPlanPrice} monthly value — included in Tools Stack Investment`,
     });
     free.push({ label: "Own sending servers", amount: s.ownServersValue, note: "Included FREE" });
     free.push({ label: "Traditional marketing technique", amount: 0, note: "Included FREE" });
@@ -267,7 +267,7 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
   const sum = (l: Line[]) => r2(l.reduce((a, b) => a + b.amount, 0));
   const oneTimeTotal = sum(oneTime);
   const campaignTotal = sum(campaign);
-  const monthlyTotal = inputs.kind === "email" ? 0 : sum(monthly);
+  const monthlyTotal = sum(monthly);
 
   return {
     currency,

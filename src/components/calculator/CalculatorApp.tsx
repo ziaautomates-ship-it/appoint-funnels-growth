@@ -665,7 +665,6 @@ export default function CalculatorApp() {
                     lines={result.monthly}
                     total={result.monthlyTotal}
                     currency={result.currency}
-                    informational={kind === "email"}
                   />
                   <div className="rounded-3xl border border-primary/40 bg-primary/10 p-7">
                     <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
@@ -874,7 +873,7 @@ export default function CalculatorApp() {
                   </li>
                   <li>
                     {kind === "email"
-                      ? `${money(result.currency, settings.instantlyPlanPrice)}/month Instantly Cold Emailing Software is included in the tools stack investment.`
+                      ? `Instantly Cold Emailing Software\n${money(result.currency, settings.instantlyPlanPrice)}/month from Month 2 onward.`
                       : `${money(result.currency, settings.monthlyRecurring)}/month recurring cost begins from Month 2 onward.`}
                   </li>
                 </ul>
@@ -943,14 +942,12 @@ function Bucket({
   total,
   currency,
   empty,
-  informational = false,
 }: {
   title: string;
   lines: { label: string; amount: number; note?: string }[];
   total: number;
   currency: string;
   empty?: string;
-  informational?: boolean;
 }) {
   return (
     <div className="rounded-3xl border border-border bg-surface/60 p-7">
@@ -969,7 +966,7 @@ function Bucket({
       </ul>
       <p className="mt-5 flex justify-between border-t border-border pt-4 text-sm font-semibold">
         <span>Subtotal</span>
-        <span>{informational ? "Included above" : money(currency, total)}</span>
+          <span>{money(currency, total)}</span>
       </p>
     </div>
   );
