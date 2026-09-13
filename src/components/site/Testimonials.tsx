@@ -62,18 +62,14 @@ export default function Testimonials() {
                   transition={{ duration: 0.4 }}
                   className="mt-8"
                 >
-                  <p className="text-2xl leading-snug font-medium sm:text-3xl">
-                    “{active.quote}”
-                  </p>
+                  <p className="text-2xl leading-snug font-medium sm:text-3xl">“{active.quote}”</p>
                   <footer className="mt-10 flex flex-wrap items-center gap-4">
                     <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-primary/15 text-sm font-bold text-primary">
                       {active.initials}
                     </span>
                     <span className="min-w-0">
                       <span className="block text-sm font-semibold">{active.name}</span>
-                      <span className="block text-sm text-muted-foreground">
-                        {active.business}
-                      </span>
+                      <span className="block text-sm text-muted-foreground">{active.business}</span>
                     </span>
                     <span className="ml-auto rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-xs font-semibold text-primary">
                       {active.stat}

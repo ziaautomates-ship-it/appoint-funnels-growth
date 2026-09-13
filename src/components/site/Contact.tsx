@@ -50,13 +50,25 @@ export default function Contact() {
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-1">
-                <label htmlFor="name" className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                <label
+                  htmlFor="name"
+                  className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground"
+                >
                   Name
                 </label>
-                <input id="name" name="name" required placeholder="Jane Doe" className={fieldClass} />
+                <input
+                  id="name"
+                  name="name"
+                  required
+                  placeholder="Jane Doe"
+                  className={fieldClass}
+                />
               </div>
               <div className="sm:col-span-1">
-                <label htmlFor="email" className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                <label
+                  htmlFor="email"
+                  className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground"
+                >
                   Email
                 </label>
                 <input
@@ -69,13 +81,24 @@ export default function Contact() {
                 />
               </div>
               <div className="sm:col-span-1">
-                <label htmlFor="company" className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                <label
+                  htmlFor="company"
+                  className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground"
+                >
                   Company
                 </label>
-                <input id="company" name="company" placeholder="Company name" className={fieldClass} />
+                <input
+                  id="company"
+                  name="company"
+                  placeholder="Company name"
+                  className={fieldClass}
+                />
               </div>
               <div className="sm:col-span-1">
-                <label htmlFor="revenue" className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                <label
+                  htmlFor="revenue"
+                  className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground"
+                >
                   Monthly Revenue
                 </label>
                 <select id="revenue" name="revenue" defaultValue="" className={fieldClass}>
@@ -89,7 +112,10 @@ export default function Contact() {
                 </select>
               </div>
               <div className="sm:col-span-2">
-                <label htmlFor="message" className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                <label
+                  htmlFor="message"
+                  className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground"
+                >
                   Message
                 </label>
                 <textarea

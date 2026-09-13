@@ -10,7 +10,11 @@ import {
 import { Display, Reveal, SectionLabel } from "./primitives";
 
 const steps = [
-  { icon: MousePointerClick, title: "Traffic", text: "Meta Ads put your offer in front of buyers." },
+  {
+    icon: MousePointerClick,
+    title: "Traffic",
+    text: "Meta Ads put your offer in front of buyers.",
+  },
   { icon: LayoutTemplate, title: "Landing Page", text: "A focused page built to convert." },
   { icon: Filter, title: "Qualification", text: "Smart forms filter out tyre-kickers." },
   { icon: CalendarCheck, title: "Booking", text: "Calendar slots fill automatically." },

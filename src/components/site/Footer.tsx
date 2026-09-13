@@ -2,10 +2,10 @@ import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import logoAsset from "@/assets/appoint-funnels-logo.png.asset.json";
 
 const links = [
-  { label: "Services", href: "#services" },
-  { label: "Case Studies", href: "#results" },
-  { label: "About", href: "#home" },
-  { label: "Contact", href: "#contact" },
+  { label: "Services", href: "/#services" },
+  { label: "Case Studies", href: "/#results" },
+  { label: "About", href: "/#home" },
+  { label: "Contact", href: "/#contact" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms", href: "#contact" },
 ];
@@ -22,8 +22,12 @@ export default function Footer() {
     <footer className="border-t border-border py-14">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
-          <a href="#home" className="flex min-w-0 items-center gap-2.5">
-            <img src={logoAsset.url} alt="Appoint Funnels logo" className="h-9 w-9 shrink-0 rounded-lg object-cover" />
+          <a href="/#home" className="flex min-w-0 items-center gap-2.5">
+            <img
+              src={logoAsset.url}
+              alt="Appoint Funnels logo"
+              className="h-9 w-9 shrink-0 rounded-lg object-cover"
+            />
             <span className="truncate text-base font-semibold">Appoint Funnels</span>
           </a>
 

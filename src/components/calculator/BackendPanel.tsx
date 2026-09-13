@@ -157,7 +157,9 @@ export default function BackendPanel({
           <div className="mt-6 space-y-8">
             {groups.map((g) => (
               <div key={g}>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">{g}</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                  {g}
+                </h3>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {NUM_FIELDS.filter((f) => f.group === g).map((f) => (
                     <label key={String(f.key)} className="block">

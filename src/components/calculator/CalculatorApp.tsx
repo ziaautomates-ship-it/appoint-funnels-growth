@@ -90,8 +90,8 @@ export default function CalculatorApp() {
       connectRate: s.callConnectRate,
       callApptRate: s.callApptRate,
       callCloseRate: s.callCloseRate,
-        agents: 5,
-        hoursPerAgent: 40,
+      agents: 5,
+      hoursPerAgent: 40,
     }));
   }, []);
 
@@ -169,12 +169,13 @@ export default function CalculatorApp() {
         emailPersonalizationPricePer10k: settings.emailPersonalizationPricePer10k,
         callAgentHourlyRate: settings.callAgentHourlyRate,
         callAgentLaborCost:
-          Math.round(inputs.agents * inputs.hoursPerAgent * settings.callAgentHourlyRate * 100) / 100,
+          Math.round(inputs.agents * inputs.hoursPerAgent * settings.callAgentHourlyRate * 100) /
+          100,
         setupFee: result.oneTimeTotal,
       },
       investment: {
         oneTimeCosts: result.oneTime,
-        campaignCosts: result.campaign,
+        toolsStackInvestment: result.campaign,
         monthlyCosts: result.monthly,
         includedFree: result.free,
         oneTimeInvestment: result.oneTimeTotal,
@@ -209,8 +210,7 @@ export default function CalculatorApp() {
     }
   }
 
-  const numSet = (k: keyof typeof inputs) => (v: number) =>
-    setInputs((p) => ({ ...p, [k]: v }));
+  const numSet = (k: keyof typeof inputs) => (v: number) => setInputs((p) => ({ ...p, [k]: v }));
 
   const expectedRevenue = Math.round(result.clients * revenuePerClose);
   const expectedRevenueLow = Math.round(Math.max(0, result.clients - 1) * revenuePerClose);
@@ -313,33 +313,158 @@ export default function CalculatorApp() {
             <div className="mt-6 space-y-1">
               {kind === "email" && (
                 <>
-                  <SliderRow label="Number of mailboxes" value={inputs.mailboxes} min={1} max={100} step={1} onChange={numSet("mailboxes")} format={(v) => `${v}`} hint={`Recommended minimum: ${settings.minMailboxes}`} />
-                  <SliderRow label="Leads / emails" value={inputs.leadQty} min={1000} max={200000} step={1000} onChange={numSet("leadQty")} format={(v) => v.toLocaleString()} hint="Scraping, verification and personalization scale per 10,000" />
+                  <SliderRow
+                    label="Number of mailboxes"
+                    value={inputs.mailboxes}
+                    min={1}
+                    max={100}
+                    step={1}
+                    onChange={numSet("mailboxes")}
+                    format={(v) => `${v}`}
+                    hint={`Recommended minimum: ${settings.minMailboxes}`}
+                  />
+                  <SliderRow
+                    label="Leads / emails"
+                    value={inputs.leadQty}
+                    min={1000}
+                    max={200000}
+                    step={1000}
+                    onChange={numSet("leadQty")}
+                    format={(v) => v.toLocaleString()}
+                    hint="Scraping, verification and personalization scale per 10,000"
+                  />
                 </>
               )}
               {kind === "sms" && (
                 <>
-                  <SliderRow label="Mobile phone numbers" value={inputs.phoneNumbers} min={1} max={200} step={1} onChange={numSet("phoneNumbers")} format={(v) => `${v}`} hint={`Recommended minimum: ${settings.minPhoneNumbers}`} />
-                  <SliderRow label="SMS / leads" value={inputs.smsQty} min={1000} max={200000} step={1000} onChange={numSet("smsQty")} format={(v) => v.toLocaleString()} hint="All sending costs scale per 10,000" />
+                  <SliderRow
+                    label="Mobile phone numbers"
+                    value={inputs.phoneNumbers}
+                    min={1}
+                    max={200}
+                    step={1}
+                    onChange={numSet("phoneNumbers")}
+                    format={(v) => `${v}`}
+                    hint={`Recommended minimum: ${settings.minPhoneNumbers}`}
+                  />
+                  <SliderRow
+                    label="SMS / leads"
+                    value={inputs.smsQty}
+                    min={1000}
+                    max={200000}
+                    step={1000}
+                    onChange={numSet("smsQty")}
+                    format={(v) => v.toLocaleString()}
+                    hint="All sending costs scale per 10,000"
+                  />
                 </>
               )}
               {kind === "meta" && (
                 <>
-                  <SliderRow label="Ad spend" value={inputs.adSpend} min={100} max={100000} step={100} onChange={numSet("adSpend")} format={(v) => `${result.currency}${v.toLocaleString()}`} />
-                  <SliderRow label="Cost per lead" value={inputs.costPerLead} min={0.5} max={100} step={0.5} onChange={numSet("costPerLead")} format={(v) => `${result.currency}${v}`} />
-                  <SliderRow label="Appointment rate" value={inputs.metaApptRate} min={1} max={100} step={1} onChange={numSet("metaApptRate")} format={(v) => `${v}%`} />
-                  <SliderRow label="Close rate" value={inputs.metaCloseRate} min={1} max={100} step={1} onChange={numSet("metaCloseRate")} format={(v) => `${v}%`} />
+                  <SliderRow
+                    label="Ad spend"
+                    value={inputs.adSpend}
+                    min={100}
+                    max={100000}
+                    step={100}
+                    onChange={numSet("adSpend")}
+                    format={(v) => `${result.currency}${v.toLocaleString()}`}
+                  />
+                  <SliderRow
+                    label="Cost per lead"
+                    value={inputs.costPerLead}
+                    min={0.5}
+                    max={100}
+                    step={0.5}
+                    onChange={numSet("costPerLead")}
+                    format={(v) => `${result.currency}${v}`}
+                  />
+                  <SliderRow
+                    label="Appointment rate"
+                    value={inputs.metaApptRate}
+                    min={1}
+                    max={100}
+                    step={1}
+                    onChange={numSet("metaApptRate")}
+                    format={(v) => `${v}%`}
+                  />
+                  <SliderRow
+                    label="Close rate"
+                    value={inputs.metaCloseRate}
+                    min={1}
+                    max={100}
+                    step={1}
+                    onChange={numSet("metaCloseRate")}
+                    format={(v) => `${v}%`}
+                  />
                 </>
               )}
               {kind === "call" && (
                 <>
-                  <SliderRow label="Number of agents" value={inputs.agents} min={1} max={50} step={1} onChange={numSet("agents")} format={(v) => `${v}`} />
-                  <SliderRow label="Hours per agent" value={inputs.hoursPerAgent} min={1} max={200} step={1} onChange={numSet("hoursPerAgent")} format={(v) => `${v} hours`} hint={`${result.currency}${settings.callAgentHourlyRate} per agent-hour`} />
-                  <SliderRow label="Number of calls" value={inputs.calls} min={100} max={200000} step={100} onChange={numSet("calls")} format={(v) => v.toLocaleString()} />
-                  <SliderRow label="Cost per call" value={inputs.costPerCall} min={0.05} max={5} step={0.05} onChange={numSet("costPerCall")} format={(v) => `${result.currency}${v.toFixed(2)}`} />
-                  <SliderRow label="Connection rate" value={inputs.connectRate} min={1} max={100} step={1} onChange={numSet("connectRate")} format={(v) => `${v}%`} />
-                  <SliderRow label="Appointment rate (of connections)" value={inputs.callApptRate} min={1} max={100} step={1} onChange={numSet("callApptRate")} format={(v) => `${v}%`} />
-                  <SliderRow label="Close rate" value={inputs.callCloseRate} min={1} max={100} step={1} onChange={numSet("callCloseRate")} format={(v) => `${v}%`} />
+                  <SliderRow
+                    label="Number of agents"
+                    value={inputs.agents}
+                    min={1}
+                    max={50}
+                    step={1}
+                    onChange={numSet("agents")}
+                    format={(v) => `${v}`}
+                  />
+                  <SliderRow
+                    label="Hours per agent"
+                    value={inputs.hoursPerAgent}
+                    min={1}
+                    max={200}
+                    step={1}
+                    onChange={numSet("hoursPerAgent")}
+                    format={(v) => `${v} hours`}
+                    hint={`${result.currency}${settings.callAgentHourlyRate} per agent-hour`}
+                  />
+                  <SliderRow
+                    label="Number of calls"
+                    value={inputs.calls}
+                    min={100}
+                    max={200000}
+                    step={100}
+                    onChange={numSet("calls")}
+                    format={(v) => v.toLocaleString()}
+                  />
+                  <SliderRow
+                    label="Cost per call"
+                    value={inputs.costPerCall}
+                    min={0.05}
+                    max={5}
+                    step={0.05}
+                    onChange={numSet("costPerCall")}
+                    format={(v) => `${result.currency}${v.toFixed(2)}`}
+                  />
+                  <SliderRow
+                    label="Connection rate"
+                    value={inputs.connectRate}
+                    min={1}
+                    max={100}
+                    step={1}
+                    onChange={numSet("connectRate")}
+                    format={(v) => `${v}%`}
+                  />
+                  <SliderRow
+                    label="Appointment rate (of connections)"
+                    value={inputs.callApptRate}
+                    min={1}
+                    max={100}
+                    step={1}
+                    onChange={numSet("callApptRate")}
+                    format={(v) => `${v}%`}
+                  />
+                  <SliderRow
+                    label="Close rate"
+                    value={inputs.callCloseRate}
+                    min={1}
+                    max={100}
+                    step={1}
+                    onChange={numSet("callCloseRate")}
+                    format={(v) => `${v}%`}
+                  />
                 </>
               )}
               <SliderRow
@@ -379,7 +504,6 @@ export default function CalculatorApp() {
               </div>
             </div>
 
-
             {result.capacity.length > 0 && (
               <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
                 {result.capacity.map((c) => (
@@ -392,7 +516,10 @@ export default function CalculatorApp() {
             )}
 
             {result.warnings.map((w) => (
-              <p key={w} className="mt-4 flex gap-2 rounded-xl border border-primary/40 bg-primary/10 p-4 text-sm text-foreground">
+              <p
+                key={w}
+                className="mt-4 flex gap-2 rounded-xl border border-primary/40 bg-primary/10 p-4 text-sm text-foreground"
+              >
                 <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 {w}
               </p>
@@ -401,8 +528,8 @@ export default function CalculatorApp() {
             {kind === "sms" && (
               <p className="mt-4 flex gap-2 text-sm text-muted-foreground">
                 <Gift className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                Tools: SMS Account (10DLC Verified) — {money("$", settings.smsAccountValue)} value with
-                LLC, included FREE.
+                Tools: SMS Account (10DLC Verified) — {money("$", settings.smsAccountValue)} value
+                with LLC, included FREE.
               </p>
             )}
           </div>
@@ -414,22 +541,56 @@ export default function CalculatorApp() {
             </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <div>
-                <label className={labelCls} htmlFor="cname">Client name</label>
-                <input id="cname" value={client.name} onChange={(e) => setClient({ ...client, name: e.target.value })} placeholder="Jane Doe" className={field} />
+                <label className={labelCls} htmlFor="cname">
+                  Client name
+                </label>
+                <input
+                  id="cname"
+                  value={client.name}
+                  onChange={(e) => setClient({ ...client, name: e.target.value })}
+                  placeholder="Jane Doe"
+                  className={field}
+                />
               </div>
               <div>
-                <label className={labelCls} htmlFor="ccomp">Company name</label>
-                <input id="ccomp" value={client.company} onChange={(e) => setClient({ ...client, company: e.target.value })} placeholder="Acme Ltd" className={field} />
+                <label className={labelCls} htmlFor="ccomp">
+                  Company name
+                </label>
+                <input
+                  id="ccomp"
+                  value={client.company}
+                  onChange={(e) => setClient({ ...client, company: e.target.value })}
+                  placeholder="Acme Ltd"
+                  className={field}
+                />
               </div>
               <div>
-                <label className={labelCls} htmlFor="cemail">Email</label>
-                <input id="cemail" type="email" value={client.email} onChange={(e) => setClient({ ...client, email: e.target.value })} placeholder="jane@acme.com" className={field} />
+                <label className={labelCls} htmlFor="cemail">
+                  Email
+                </label>
+                <input
+                  id="cemail"
+                  type="email"
+                  value={client.email}
+                  onChange={(e) => setClient({ ...client, email: e.target.value })}
+                  placeholder="jane@acme.com"
+                  className={field}
+                />
               </div>
               <div>
-                <label className={labelCls} htmlFor="ccountry">Country</label>
-                <select id="ccountry" value={client.country} onChange={(e) => setClient({ ...client, country: e.target.value })} className={field}>
+                <label className={labelCls} htmlFor="ccountry">
+                  Country
+                </label>
+                <select
+                  id="ccountry"
+                  value={client.country}
+                  onChange={(e) => setClient({ ...client, country: e.target.value })}
+                  className={field}
+                >
                   {COUNTRIES.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -460,7 +621,11 @@ export default function CalculatorApp() {
           {/* Investment */}
           <section ref={resultsRef} className="scroll-mt-28 py-16">
             <div className="mx-auto max-w-7xl px-5 lg:px-8">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
                 <SectionLabel>Your Investment</SectionLabel>
                 <Display className="mt-6">Investment Breakdown.</Display>
                 <p className="mt-5 max-w-xl text-base text-muted-foreground">
@@ -469,32 +634,61 @@ export default function CalculatorApp() {
 
                 <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
                   {result.funnel.map((f) => (
-                    <div key={f.label} className="rounded-3xl border border-border bg-surface/60 p-6">
-                      <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{f.label}</p>
+                    <div
+                      key={f.label}
+                      className="rounded-3xl border border-border bg-surface/60 p-6"
+                    >
+                      <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                        {f.label}
+                      </p>
                       <p className="display-xl mt-3 text-4xl">{f.value}</p>
                     </div>
                   ))}
                 </div>
 
                 <div className="mt-8 grid gap-5 lg:grid-cols-2">
-                  <Bucket title="One-Time Costs" lines={result.oneTime} total={result.oneTimeTotal} currency={result.currency} empty="No setup or service charge for your country." />
-                   <Bucket title="Tools Stack Investment" lines={result.campaign} total={result.campaignTotal} currency={result.currency} />
-                   <Bucket title="Monthly Costs" lines={result.monthly} total={result.monthlyTotal} currency={result.currency} informational={kind === "email"} />
+                  <Bucket
+                    title="One-Time Costs"
+                    lines={result.oneTime}
+                    total={result.oneTimeTotal}
+                    currency={result.currency}
+                    empty="No setup or service charge for your country."
+                  />
+                  <Bucket
+                    title="Tools Stack Investment"
+                    lines={result.campaign}
+                    total={result.campaignTotal}
+                    currency={result.currency}
+                  />
+                  <Bucket
+                    title="Monthly Costs"
+                    lines={result.monthly}
+                    total={result.monthlyTotal}
+                    currency={result.currency}
+                  />
                   <div className="rounded-3xl border border-primary/40 bg-primary/10 p-7">
-                    <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">Included Free</h3>
+                    <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+                      Included Free
+                    </h3>
                     <ul className="mt-5 space-y-3 text-sm">
                       {result.free.length === 0 && (
-                        <li className="text-muted-foreground">Onboarding, campaign build and reporting included.</li>
+                        <li className="text-muted-foreground">
+                          Onboarding, campaign build and reporting included.
+                        </li>
                       )}
                       {result.free.map((f) => (
                         <li key={f.label} className="flex items-start justify-between gap-4">
                           <span>
                             {f.label}
-                            {f.note && <span className="block text-xs text-muted-foreground">{f.note}</span>}
+                            {f.note && (
+                              <span className="block text-xs text-muted-foreground">{f.note}</span>
+                            )}
                           </span>
-                           <span className="shrink-0 font-semibold">
-                             {f.amount > 0 ? `${money(result.currency, f.amount)} value — FREE` : "Included FREE"}
-                           </span>
+                          <span className="shrink-0 font-semibold">
+                            {f.amount > 0
+                              ? `${money(result.currency, f.amount)} value — FREE`
+                              : "Included FREE"}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -506,17 +700,21 @@ export default function CalculatorApp() {
 
                 <div className="mt-8 flex flex-col gap-4 rounded-3xl border border-border bg-surface/60 p-7 sm:flex-row sm:items-end sm:justify-between">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Total investment</p>
-                    <p className="display-xl mt-3 text-6xl">{money(result.currency, result.total)}</p>
+                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                      Total investment
+                    </p>
+                    <p className="display-xl mt-3 text-6xl">
+                      {money(result.currency, result.total)}
+                    </p>
                     <p className="mt-3 text-sm text-muted-foreground">
-                       One-time {money(result.currency, result.oneTimeTotal)} · Tools stack{" "}
+                      One-time {money(result.currency, result.oneTimeTotal)} · Tools stack{" "}
                       {money(result.currency, result.campaignTotal)} · Monthly{" "}
                       {money(result.currency, result.monthlyTotal)}
                     </p>
                   </div>
                   <p className="max-w-xs text-sm text-muted-foreground">
-                    The {settings.commissionPct}% performance commission is not part of this total and
-                    is never charged on ad spend, sending, data or tools.
+                    The {settings.commissionPct}% performance commission is not part of this total
+                    and is never charged on ad spend, sending, data or tools.
                   </p>
                 </div>
               </motion.div>
@@ -529,16 +727,25 @@ export default function CalculatorApp() {
               <SectionLabel>Guarantee</SectionLabel>
               <Display className="mt-6">Our Guarantee To {companyLabel}.</Display>
               <div className="mt-10 grid gap-5 lg:grid-cols-3">
-                <GuaranteeCard icon={CalendarClock} title="Guarantee #1 — Booked Appointments"
-                  body={`We guarantee a minimum of ${result.appointments} qualified appointments scheduled to your calendar.`} />
-                <GuaranteeCard icon={Users} title="Guarantee #2 — Clients Converted"
-                  body={`We guarantee ${result.clients} converted client${result.clients === 1 ? "" : "s"} from those appointments.`} />
-                <GuaranteeCard icon={TrendingUp} title="Guarantee #3 — Minimum ROI"
+                <GuaranteeCard
+                  icon={CalendarClock}
+                  title="Guarantee #1 — Booked Appointments"
+                  body={`We guarantee a minimum of ${result.appointments} qualified appointments scheduled to your calendar.`}
+                />
+                <GuaranteeCard
+                  icon={Users}
+                  title="Guarantee #2 — Clients Converted"
+                  body={`We guarantee ${result.clients} converted client${result.clients === 1 ? "" : "s"} from those appointments.`}
+                />
+                <GuaranteeCard
+                  icon={TrendingUp}
+                  title="Guarantee #3 — Minimum ROI"
                   body={
                     result.roi > 0
                       ? `Minimum ${result.roi}x ROI — for every ${result.currency}100 invested, you'll see at least ${result.currency}${result.roi * 100} back in closed revenue.`
                       : "Meta Ads ROI guarantee is configurable and will be confirmed with you before launch."
-                  } />
+                  }
+                />
               </div>
               <div className="mt-6 flex items-center gap-3 rounded-3xl border border-border bg-surface/60 p-7 text-sm text-muted-foreground">
                 <CalendarClock className="h-5 w-5 shrink-0 text-primary" />
@@ -554,14 +761,41 @@ export default function CalculatorApp() {
               <Display className="mt-6">Built For {companyLabel}.</Display>
               <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {[
-                  { icon: BadgeCheck, title: "Guarantees in writing", body: `Every number in this proposal is calculated from your own inputs, ${nameLabel} — not a generic brochure figure.` },
-                  { icon: Percent, title: "We only win when you win", body: `Our ${settings.commissionPct}% commission is charged on closed deals only, never on ${companyLabel}'s campaign spend.` },
-                  { icon: ShieldCheck, title: "Full exclusivity", body: `Every appointment we generate belongs to ${companyLabel} alone.` },
-                  { icon: Sparkles, title: "Done-for-you infrastructure", body: "Numbers, mailboxes, data, validation, copy and automations are all handled by our team." },
-                  { icon: Target, title: "One proven system", body: "The same outreach framework, adapted to the channel that fits your market." },
-                  { icon: TrendingUp, title: "Transparent reporting", body: "You see the sends, replies, appointments and revenue attributed to every campaign." },
+                  {
+                    icon: BadgeCheck,
+                    title: "Guarantees in writing",
+                    body: `Every number in this proposal is calculated from your own inputs, ${nameLabel} — not a generic brochure figure.`,
+                  },
+                  {
+                    icon: Percent,
+                    title: "We only win when you win",
+                    body: `Our ${settings.commissionPct}% commission is charged on closed deals only, never on ${companyLabel}'s campaign spend.`,
+                  },
+                  {
+                    icon: ShieldCheck,
+                    title: "Full exclusivity",
+                    body: `Every appointment we generate belongs to ${companyLabel} alone.`,
+                  },
+                  {
+                    icon: Sparkles,
+                    title: "Done-for-you infrastructure",
+                    body: "Numbers, mailboxes, data, validation, copy and automations are all handled by our team.",
+                  },
+                  {
+                    icon: Target,
+                    title: "One proven system",
+                    body: "The same outreach framework, adapted to the channel that fits your market.",
+                  },
+                  {
+                    icon: TrendingUp,
+                    title: "Transparent reporting",
+                    body: "You see the sends, replies, appointments and revenue attributed to every campaign.",
+                  },
                 ].map((c) => (
-                  <div key={c.title} className="rounded-3xl border border-border bg-surface/60 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50">
+                  <div
+                    key={c.title}
+                    className="rounded-3xl border border-border bg-surface/60 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50"
+                  >
                     <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary/12 text-primary">
                       <c.icon className="h-5 w-5" />
                     </span>
@@ -578,7 +812,9 @@ export default function CalculatorApp() {
             <div className="mx-auto max-w-7xl px-5 lg:px-8">
               <div className="rounded-[1.75rem] border border-border bg-surface/60 p-8 sm:p-10">
                 <SectionLabel>Exclusivity</SectionLabel>
-                <h2 className="mt-6 text-2xl font-semibold sm:text-3xl">Appointment Exclusivity Policy</h2>
+                <h2 className="mt-6 text-2xl font-semibold sm:text-3xl">
+                  Appointment Exclusivity Policy
+                </h2>
                 <ul className="mt-6 space-y-4 text-sm leading-relaxed text-muted-foreground">
                   <li>All appointments belong exclusively to {companyLabel}.</li>
                   <li>
@@ -586,7 +822,9 @@ export default function CalculatorApp() {
                     shared with, sold to, transferred to, or used by Appoint Funnels or any third
                     party under any circumstances.
                   </li>
-                  <li>Every booked appointment is delivered directly and solely to {companyLabel}.</li>
+                  <li>
+                    Every booked appointment is delivered directly and solely to {companyLabel}.
+                  </li>
                   <li>
                     Appoint Funnels will not use any generated leads for its own outreach or for
                     another client.
@@ -614,7 +852,9 @@ export default function CalculatorApp() {
                   charges a flat {settings.commissionPct}% commission on the original deal value
                   generated from leads produced through the campaign.
                 </p>
-                <h3 className="mt-8 text-base font-semibold">What We Don&apos;t Charge Commission On</h3>
+                <h3 className="mt-8 text-base font-semibold">
+                  What We Don&apos;t Charge Commission On
+                </h3>
                 <ul className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
                   <li>No commission on referral-generated revenue from that customer.</li>
                   <li>No commission on later upsells or cross-sells to that customer.</li>
@@ -633,7 +873,7 @@ export default function CalculatorApp() {
                   </li>
                   <li>
                     {kind === "email"
-                      ? `${money(result.currency, settings.instantlyPlanPrice)}/month Instantly Cold Emailing Software is included in the tools stack investment.`
+                      ? `Instantly Cold Emailing Software\n${money(result.currency, settings.instantlyPlanPrice)}/month from Month 2 onward.`
                       : `${money(result.currency, settings.monthlyRecurring)}/month recurring cost begins from Month 2 onward.`}
                   </li>
                 </ul>
@@ -686,7 +926,11 @@ export default function CalculatorApp() {
       )}
 
       {backendOpen && (
-        <BackendPanel settings={settings} onChange={setSettings} onClose={() => setBackendOpen(false)} />
+        <BackendPanel
+          settings={settings}
+          onChange={setSettings}
+          onClose={() => setBackendOpen(false)}
+        />
       )}
     </>
   );
@@ -698,14 +942,12 @@ function Bucket({
   total,
   currency,
   empty,
-  informational = false,
 }: {
   title: string;
   lines: { label: string; amount: number; note?: string }[];
   total: number;
   currency: string;
   empty?: string;
-  informational?: boolean;
 }) {
   return (
     <div className="rounded-3xl border border-border bg-surface/60 p-7">
@@ -724,7 +966,7 @@ function Bucket({
       </ul>
       <p className="mt-5 flex justify-between border-t border-border pt-4 text-sm font-semibold">
         <span>Subtotal</span>
-         <span>{informational ? "Included above" : money(currency, total)}</span>
+        <span>{money(currency, total)}</span>
       </p>
     </div>
   );

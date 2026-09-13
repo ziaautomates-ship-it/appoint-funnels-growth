@@ -1,9 +1,4 @@
-import {
-  currencyFor,
-  setupFeeFor,
-  type CalcKind,
-  type CalcSettings,
-} from "./calc-settings";
+import { currencyFor, setupFeeFor, type CalcKind, type CalcSettings } from "./calc-settings";
 
 export type Line = { label: string; amount: number; note?: string };
 
@@ -79,23 +74,66 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
     const k = inputs.leadQty / 10000;
     const mailboxCost = r2(inputs.mailboxes * s.mailboxPrice);
     const domainCost = r2(inputs.mailboxes * s.domainPrice);
-    campaign.push({ label: `Mailboxes (${inputs.mailboxes})`, amount: mailboxCost, note: `${currency}${s.mailboxPrice} per mailbox / month` });
-    campaign.push({ label: `Domains (${inputs.mailboxes})`, amount: domainCost, note: `${currency}${s.domainPrice} per domain` });
-    campaign.push({ label: "Instantly Hyper Growth Plan (Split)", amount: s.instantlyPlanPrice, note: "Monthly emailing software" });
-    campaign.push({ label: `Lead scraping (${inputs.leadQty.toLocaleString()} leads)`, amount: r2(k * s.leadPricePer10k), note: `${currency}${s.leadPricePer10k} per 10,000` });
-    campaign.push({ label: `Email validation (${inputs.leadQty.toLocaleString()})`, amount: r2(k * s.validationPricePer10k), note: `${currency}${s.validationPricePer10k} per 10,000` });
-    campaign.push({ label: "Email personalization credits", amount: r2(k * s.emailPersonalizationPricePer10k), note: `${currency}${s.emailPersonalizationPricePer10k} per 10,000` });
-    monthly.push({ label: `Mailboxes (${inputs.mailboxes})`, amount: mailboxCost, note: "Shown in Tools Stack Investment; not charged twice" });
-    monthly.push({ label: "Instantly Hyper Growth Plan (Split)", amount: s.instantlyPlanPrice, note: "Shown in Tools Stack Investment; not charged twice" });
+    campaign.push({
+      label: `Mailboxes (${inputs.mailboxes})`,
+      amount: mailboxCost,
+      note: `${currency}${s.mailboxPrice} per mailbox / month`,
+    });
+    campaign.push({
+      label: `Domains (${inputs.mailboxes})`,
+      amount: domainCost,
+      note: `${currency}${s.domainPrice} per domain`,
+    });
+    campaign.push({
+      label: "Instantly Hyper Growth Plan (Split)",
+      amount: s.instantlyPlanPrice,
+      note: "Monthly emailing software",
+    });
+    campaign.push({
+      label: `Lead scraping (${inputs.leadQty.toLocaleString()} leads)`,
+      amount: r2(k * s.leadPricePer10k),
+      note: `${currency}${s.leadPricePer10k} per 10,000`,
+    });
+    campaign.push({
+      label: `Email validation (${inputs.leadQty.toLocaleString()})`,
+      amount: r2(k * s.validationPricePer10k),
+      note: `${currency}${s.validationPricePer10k} per 10,000`,
+    });
+    campaign.push({
+      label: "Email personalization credits",
+      amount: r2(k * s.emailPersonalizationPricePer10k),
+      note: `${currency}${s.emailPersonalizationPricePer10k} per 10,000`,
+    });
+    monthly.push({
+      label: `Mailboxes (${inputs.mailboxes})`,
+      amount: 0,
+      note: `${currency}${mailboxCost.toLocaleString()} monthly value — included in Tools Stack Investment`,
+    });
+    monthly.push({
+      label: "Instantly Hyper Growth Plan (Split)",
+      amount: 0,
+      note: `${currency}${s.instantlyPlanPrice} monthly value — included in Tools Stack Investment`,
+    });
     free.push({ label: "Own sending servers", amount: s.ownServersValue, note: "Included FREE" });
     free.push({ label: "Traditional marketing technique", amount: 0, note: "Included FREE" });
-    free.push({ label: "No management and service fee", amount: s.noManagementFeeValue, note: `${currency}${s.noManagementFeeValue.toLocaleString()} value — Included FREE` });
+    free.push({
+      label: "No management and service fee",
+      amount: s.noManagementFeeValue,
+      note: `${currency}${s.noManagementFeeValue.toLocaleString()} value — Included FREE`,
+    });
     if (inputs.mailboxes < s.minMailboxes) {
-      warnings.push(`${inputs.mailboxes} mailboxes may not provide enough sending capacity for this campaign (recommended minimum ${s.minMailboxes}).`);
+      warnings.push(
+        `${inputs.mailboxes} mailboxes may not provide enough sending capacity for this campaign (recommended minimum ${s.minMailboxes}).`,
+      );
     }
     const perDay = inputs.mailboxes * s.emailsPerMailboxPerDay;
-    capacity.push(`${inputs.mailboxes} mailboxes × ${s.emailsPerMailboxPerDay} emails/day = ${perDay.toLocaleString()} emails/day`);
-    if (perDay > 0) capacity.push(`${inputs.leadQty.toLocaleString()} emails ≈ ${Math.ceil(inputs.leadQty / perDay)} sending days`);
+    capacity.push(
+      `${inputs.mailboxes} mailboxes × ${s.emailsPerMailboxPerDay} emails/day = ${perDay.toLocaleString()} emails/day`,
+    );
+    if (perDay > 0)
+      capacity.push(
+        `${inputs.leadQty.toLocaleString()} emails ≈ ${Math.ceil(inputs.leadQty / perDay)} sending days`,
+      );
     appointments = Math.round(k * s.emailApptsPer10k);
     clients = Math.floor(appointments / s.apptsPerClient);
     roi = s.emailRoi;
@@ -107,18 +145,49 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
 
   if (inputs.kind === "sms") {
     const k = inputs.smsQty / 10000;
-    campaign.push({ label: `Lead scraping (${inputs.smsQty.toLocaleString()} leads)`, amount: r2(k * s.leadPricePer10k), note: `${currency}${s.leadPricePer10k} per 10,000` });
-    campaign.push({ label: `Number validation (${inputs.smsQty.toLocaleString()})`, amount: r2(k * s.validationPricePer10k), note: `${currency}${s.validationPricePer10k} per 10,000` });
-    campaign.push({ label: `SMS sending (${inputs.smsQty.toLocaleString()} SMS)`, amount: r2(k * s.smsSendPricePer10k), note: `${currency}${s.smsSendPricePer10k} per 10,000` });
-    campaign.push({ label: "Personalization credits", amount: r2(k * s.personalizationPricePer10k), note: `${currency}${s.personalizationPricePer10k} per 10,000` });
-    monthly.push({ label: `Mobile phone numbers (${inputs.phoneNumbers})`, amount: r2(inputs.phoneNumbers * s.phoneNumberPrice), note: `${currency}${s.phoneNumberPrice} per number / month` });
-    free.push({ label: "SMS Account (10DLC Verified)", amount: s.smsAccountValue, note: `${currency}${s.smsAccountValue.toLocaleString()} value with LLC — Included FREE` });
+    campaign.push({
+      label: `Lead scraping (${inputs.smsQty.toLocaleString()} leads)`,
+      amount: r2(k * s.leadPricePer10k),
+      note: `${currency}${s.leadPricePer10k} per 10,000`,
+    });
+    campaign.push({
+      label: `Number validation (${inputs.smsQty.toLocaleString()})`,
+      amount: r2(k * s.validationPricePer10k),
+      note: `${currency}${s.validationPricePer10k} per 10,000`,
+    });
+    campaign.push({
+      label: `SMS sending (${inputs.smsQty.toLocaleString()} SMS)`,
+      amount: r2(k * s.smsSendPricePer10k),
+      note: `${currency}${s.smsSendPricePer10k} per 10,000`,
+    });
+    campaign.push({
+      label: "Personalization credits",
+      amount: r2(k * s.personalizationPricePer10k),
+      note: `${currency}${s.personalizationPricePer10k} per 10,000`,
+    });
+    monthly.push({
+      label: `Mobile phone numbers (${inputs.phoneNumbers})`,
+      amount: r2(inputs.phoneNumbers * s.phoneNumberPrice),
+      note: `${currency}${s.phoneNumberPrice} per number / month`,
+    });
+    free.push({
+      label: "SMS Account (10DLC Verified)",
+      amount: s.smsAccountValue,
+      note: `${currency}${s.smsAccountValue.toLocaleString()} value with LLC — Included FREE`,
+    });
     if (inputs.phoneNumbers < s.minPhoneNumbers) {
-      warnings.push(`${inputs.phoneNumbers} phone numbers may not provide enough sending capacity for the projected campaign (recommended minimum ${s.minPhoneNumbers}).`);
+      warnings.push(
+        `${inputs.phoneNumbers} phone numbers may not provide enough sending capacity for the projected campaign (recommended minimum ${s.minPhoneNumbers}).`,
+      );
     }
     const perDay = inputs.phoneNumbers * s.smsPerNumberPerDay;
-    capacity.push(`${inputs.phoneNumbers} numbers × ${s.smsPerNumberPerDay} SMS/day = ${perDay.toLocaleString()} SMS/day`);
-    if (perDay > 0) capacity.push(`${inputs.smsQty.toLocaleString()} SMS ≈ ${Math.ceil(inputs.smsQty / perDay)} sending days`);
+    capacity.push(
+      `${inputs.phoneNumbers} numbers × ${s.smsPerNumberPerDay} SMS/day = ${perDay.toLocaleString()} SMS/day`,
+    );
+    if (perDay > 0)
+      capacity.push(
+        `${inputs.smsQty.toLocaleString()} SMS ≈ ${Math.ceil(inputs.smsQty / perDay)} sending days`,
+      );
     appointments = Math.round(k * s.smsApptsPer10k);
     clients = Math.floor(appointments / s.apptsPerClient);
     roi = s.smsRoi;
@@ -130,7 +199,11 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
   }
 
   if (inputs.kind === "meta") {
-    campaign.push({ label: "Meta ad spend", amount: r2(inputs.adSpend), note: "Paid directly to Meta — no commission applied" });
+    campaign.push({
+      label: "Meta ad spend",
+      amount: r2(inputs.adSpend),
+      note: "Paid directly to Meta — no commission applied",
+    });
     const leads = inputs.costPerLead > 0 ? Math.floor(inputs.adSpend / inputs.costPerLead) : 0;
     appointments = Math.round((leads * inputs.metaApptRate) / 100);
     clients = Math.round((appointments * inputs.metaCloseRate) / 100);
@@ -139,21 +212,38 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
     funnel.push({ label: "Ad spend", value: `${currency}${inputs.adSpend.toLocaleString()}` });
     funnel.push({ label: "Cost per lead", value: `${currency}${inputs.costPerLead}` });
     funnel.push({ label: "Expected leads", value: leads.toLocaleString() });
-    funnel.push({ label: `Appointment rate (${inputs.metaApptRate}%)`, value: String(appointments) });
+    funnel.push({
+      label: `Appointment rate (${inputs.metaApptRate}%)`,
+      value: String(appointments),
+    });
     funnel.push({ label: `Close rate (${inputs.metaCloseRate}%)`, value: String(clients) });
   }
 
   if (inputs.kind === "call") {
-    campaign.push({ label: `Agent time (${inputs.agents} agents × ${inputs.hoursPerAgent} hours)`, amount: r2(inputs.agents * inputs.hoursPerAgent * s.callAgentHourlyRate), note: `${currency}${s.callAgentHourlyRate} per agent-hour` });
-    campaign.push({ label: `Calling cost (${inputs.calls.toLocaleString()} calls)`, amount: r2(inputs.calls * inputs.costPerCall), note: `${currency}${inputs.costPerCall} per call` });
+    campaign.push({
+      label: `Agent time (${inputs.agents} agents × ${inputs.hoursPerAgent} hours)`,
+      amount: r2(inputs.agents * inputs.hoursPerAgent * s.callAgentHourlyRate),
+      note: `${currency}${s.callAgentHourlyRate} per agent-hour`,
+    });
+    campaign.push({
+      label: `Calling cost (${inputs.calls.toLocaleString()} calls)`,
+      amount: r2(inputs.calls * inputs.costPerCall),
+      note: `${currency}${inputs.costPerCall} per call`,
+    });
     const connections = Math.round((inputs.calls * inputs.connectRate) / 100);
     appointments = Math.round((connections * inputs.callApptRate) / 100);
     clients = Math.round((appointments * inputs.callCloseRate) / 100);
     roi = s.callRoi;
     timeline = s.timelineCall;
     funnel.push({ label: "Calls", value: inputs.calls.toLocaleString() });
-    funnel.push({ label: `Connections (${inputs.connectRate}%)`, value: connections.toLocaleString() });
-    funnel.push({ label: `Appointments (${inputs.callApptRate}% of connections)`, value: String(appointments) });
+    funnel.push({
+      label: `Connections (${inputs.connectRate}%)`,
+      value: connections.toLocaleString(),
+    });
+    funnel.push({
+      label: `Appointments (${inputs.callApptRate}% of connections)`,
+      value: String(appointments),
+    });
     funnel.push({ label: `Clients (${inputs.callCloseRate}% close rate)`, value: String(clients) });
   }
 
@@ -177,7 +267,7 @@ export function compute(inputs: Inputs, s: CalcSettings): CalcResult {
   const sum = (l: Line[]) => r2(l.reduce((a, b) => a + b.amount, 0));
   const oneTimeTotal = sum(oneTime);
   const campaignTotal = sum(campaign);
-  const monthlyTotal = inputs.kind === "email" ? 0 : sum(monthly);
+  const monthlyTotal = sum(monthly);
 
   return {
     currency,
