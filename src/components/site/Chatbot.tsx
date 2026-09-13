@@ -96,7 +96,7 @@ export default function Chatbot() {
               >
                 <PromptInputTextarea ref={textareaRef} placeholder="Ask Appoint Funnels…" className="min-h-20" />
                 <PromptInputFooter className="justify-end">
-                  <PromptInputSubmit status={status} disabled={!busy && false} onStop={stop} />
+                  <PromptInputSubmit status={status} onStop={stop} />
                 </PromptInputFooter>
               </PromptInput>
             </div>

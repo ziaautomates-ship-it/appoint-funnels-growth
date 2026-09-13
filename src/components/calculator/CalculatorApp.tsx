@@ -174,7 +174,7 @@ export default function CalculatorApp() {
       },
       investment: {
         oneTimeCosts: result.oneTime,
-        campaignCosts: result.campaign,
+        toolsStackInvestment: result.campaign,
         monthlyCosts: result.monthly,
         includedFree: result.free,
         oneTimeInvestment: result.oneTimeTotal,
