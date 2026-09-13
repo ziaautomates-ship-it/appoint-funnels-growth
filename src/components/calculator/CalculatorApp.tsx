@@ -966,7 +966,7 @@ function Bucket({
       </ul>
       <p className="mt-5 flex justify-between border-t border-border pt-4 text-sm font-semibold">
         <span>Subtotal</span>
-          <span>{money(currency, total)}</span>
+        <span>{money(currency, total)}</span>
       </p>
     </div>
   );
